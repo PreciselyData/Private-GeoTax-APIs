@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "cde25853-3ed5-4b82-8cd5-1c21fc533199",
+		"name": "GeoTax-Helm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20013413",
+		"_collection_link": "https://snowflake-ss4bd.postman.co/workspace/Team-Workspace~cdff7aff-bba4-49e1-8832-a674abc5d18c/collection/20013413-cde25853-3ed5-4b82-8cd5-1c21fc533199?action=share&source=collection_link&creator=20013413"
+	},
+	"item": [
+		{
+			"name": "GEOTAX",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"output\": {\r\n            \"taxDistrict\": \"NONE\",\r\n            \"taxCrossReferenceKey\": \"NONE\",\r\n            \"salesTaxRateType\": \"NONE\",\r\n            \"outputCasing\": \"UPPER\"\r\n        },\r\n        \"geocoding\": {\r\n            \"defaultBufferWidth\": \"0\",\r\n            \"latLongOffset\": \"NONE\",\r\n            \"squeeze\": \"NO\",\r\n            \"latLongAltFormat\": \"DecimalSign\"\r\n        },\r\n        \"matching\": {\r\n            \"matchMode\": \"CLOSE\"\r\n        }\r\n    },\r\n    \"address\": {\r\n        \"addressLines\": [\r\n            \"2001 Main St, Eagle Butte, SD 57625\"\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/v1/geo-tax/address",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"v1",
+						"geo-tax",
+						"address"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "EXTERNAL-IP",
+			"value": "http://[geotax-host-url]",
+			"type": "string"
+		}
+	]
+}
