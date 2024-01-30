@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  precisely-geotax-svc:
+    image: ${_GEOTAX_IMAGE:-geotax-service:1.0.0}
+    platform: linux/amd64
+    deploy:
+      resources:
+        reservations:
+          cpus: '1'
+          memory: 1G
+    volumes:
+      - ${_DATA_PATH:-/data/extracted}:/mnt/data/extracted
+    environment:
+      - DATA_PATH=/mnt/data/extracted
+    networks:
+      - precisely-geotax
+    restart: always
+networks:
+  precisely-geotax:
+    name: geotax

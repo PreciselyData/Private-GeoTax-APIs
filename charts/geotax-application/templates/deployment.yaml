@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "geotax.fullname" . }}
+  labels:
+    service: precisely
+    app: {{ include "geotax.fullname" . }}
+    {{- include "geotax.labels" . | nindent 4 }}
+  {{- if .Values.global.manualDataConfig.enabled }}
+  annotations:
+    preicsely.com/config-checksum: {{ .Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      service: precisely
+      app: {{ include "geotax.fullname" . }}
+      {{- include "geotax.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        service: precisely
+        app: {{ include "geotax.fullname" . }}
+        {{- include "geotax.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "geotax.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- include "geotax-svc.volumeMounts" . | nindent 12 }}
+          env:
+            - name: DATA_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "geotax-data-config.name" . }}
+                  key: geotax.vintage
+            - name: SDK_BLOCKING_THREADS
+              value: "16"
+            - name: SDK_BLOCKING_QUEUE_CAPACITY
+              value: "100000"
+            - name: SDK_POOL_MAX_TOTAL
+              value: "20"
+            - name: SDK_POOL_MAX_TOTAL_PER_KEY
+              value: "8"
+            - name: SDK_POOL_MAX_IDLE_PER_KEY
+              value: "8"
+            - name: SDK_POOL_EVICTION_RUNS_INTERVAL
+              value: "30"
+            - name: SDK_POOL_MIN_EVICTABLE_IDLE_TIME
+              value: "30"
+            - name: SDK_POOL_ABANDONED_TIMEOUT
+              value: "60"
+            - name: AUTH_ENABLED
+              value: "false"
+            - name: KAFKA_ENABLED
+              value: "false"
+            - name: IS_HELM_SOLUTION
+              value: "true"
+      {{- with .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: geotax-host-volume
+          persistentVolumeClaim:
+            claimName: {{ include "geotax-pvc.name" . }}
