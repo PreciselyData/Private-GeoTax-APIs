@@ -77,7 +77,7 @@ Following is the helm version chart against GeoTax PDX docker image version and 
 
 | Helm Chart Version → <br> Geotax Docker Image Version (Version/Vintage/ReleaseDate) ↓ | `1.0.0` |
 |---------------------------------------------------------------------------------------|---------|
-| `114.678.6710/2024.1/Jan 22, 2024`                                                    | ✔️      |
+| `1.0.0/2024.1/Jan 22, 2024`                                                    | ✔️      |
 
 ## Miscellaneous
 
