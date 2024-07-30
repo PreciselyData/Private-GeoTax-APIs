@@ -27,7 +27,7 @@ provided by this chart:
 | Parameter          | Description                            | Default          |
 |--------------------|----------------------------------------|------------------|
 | `image.repository` | the geotax container image repository  | `geotax-service` |
-| `image.tag`        | the geotax container image version tag | `1.0.1`          |
+| `image.tag`        | the geotax container image version tag | `2.0.0`          |
 
 <hr>
 </details>

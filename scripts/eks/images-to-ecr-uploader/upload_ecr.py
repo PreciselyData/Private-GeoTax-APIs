@@ -218,7 +218,7 @@ if AWS_SECRET_KEY:
 if not LOCAL_PATH:
     LOCAL_PATH = os.getcwd()
 
-client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_HELM_APP_1.0.1")
+client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_HELM_APP_2.0.0")
 spd_path = os.path.join(LOCAL_PATH, "docker_images")
 os.makedirs(spd_path, exist_ok=True)
 
