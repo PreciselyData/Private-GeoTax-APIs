@@ -1,0 +1,13 @@
+apiVersion: v2
+name: geotax-eks-reference-data
+description: A Helm chart for Installation of GeoTax Reference Data
+
+type: application
+version: 1.0.1
+appVersion: "1.16.0"
+dependencies:
+  - name: geotax-reference-data-setup
+    repository: file://../../component-charts/reference-data-setup-generic
+    version: "1.0.1"
+
+

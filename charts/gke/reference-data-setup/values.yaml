@@ -1,0 +1,4 @@
+global:
+  nfs:
+    shareName: geotaxshare
+    storageAccount: geotax

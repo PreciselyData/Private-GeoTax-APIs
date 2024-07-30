@@ -1,0 +1,50 @@
+{{- if .Values.dataDownload.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-download"
+  labels:
+    {{- include "reference-data.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/resource-policy": delete
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-download"
+      labels:
+        {{- include "reference-data.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.dataDownload.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      volumes:
+        - name: geotax-host-volume
+          persistentVolumeClaim:
+            claimName: {{ include "geotax-ref-pvc.name" .}}
+      containers:
+        - name: data-download-job
+          image: "{{ .Values.dataDownload.image.repository }}:{{ .Values.dataDownload.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.dataDownload.image.pullPolicy }}
+          args:
+            - "--pdx-api-key"
+            - "{{ .Values.global.pdxApiKey }}"
+            - "--pdx-api-secret"
+            - "{{ .Values.global.pdxSecret }}"
+            - "--dest-path"
+            - {{ printf "%s/%s" .Values.global.nfs.volumeMountPath (trimPrefix "/" .Values.global.nfs.geotaxBasePath) | quote }}
+            - "--data-mapping"
+            - {{ .Values.global.dataConfigMap | quote }}
+          volumeMounts:
+            {{- include "reference-data.volumeMounts" . | nindent 12 }}
+      terminationGracePeriodSeconds: 0
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -1,0 +1,24 @@
+dataDownload:
+  enabled: true
+  image:
+    repository: geotax-reference-data-extractor
+    pullPolicy: Always
+    tag: 1.0.1
+    pullSecrets: [ ]
+
+nameOverride: "geotax-reference-data"
+fullnameOverride: "geotax-reference-data"
+
+service:
+  type: ClusterIP
+  port: 80
+
+nodeSelector: { }
+
+global:
+  pdxApiKey: "pdx-api-key"
+  pdxSecret: "pdx-api-secret"
+  nfs:
+    volumeMountPath: "/mnt/data/geotax-data"
+    geotaxBasePath: "geotax"
+  dataConfigMap: "[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]"

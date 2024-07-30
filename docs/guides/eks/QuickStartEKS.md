@@ -17,7 +17,7 @@ To deploy the GeoTax application in AWS EKS, install the following client tools:
 You can create the EKS cluster or use existing EKS cluster.
 
 - If you DON'T have EKS cluster, we have provided you with a
-  sample [cluster installation script](../../../cluster-sample/create-eks-cluster.yaml). Run the following command from
+  sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command from
   parent directory to create the cluster using the script:
     ```shell
     eksctl create cluster -f ./cluster-sample/create-eks-cluster.yaml
@@ -40,7 +40,7 @@ You can create the EKS cluster or use existing EKS cluster.
     ```
 - Once you create EKS cluster, you can
   apply [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) so that the
-  cluster can be scaled vertically as per requirements. We have provided a sample [cluster autoscaler script](../../../cluster-sample/cluster-auto-scaler.yaml). 
+  cluster can be scaled vertically as per requirements. We have provided a sample [cluster autoscaler script](../../../cluster-sample/eks/cluster-auto-scaler.yaml). 
 - Please run the following command to create cluster autoscaler:
     ```shell
     kubectl apply -f ./cluster-sample/cluster-auto-scaler.yaml
@@ -85,7 +85,7 @@ python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] -
 ```
 
 For more details related to docker images download script, follow the
-instructions [here](../../../scripts/images-to-ecr-uploader/README.md)
+instructions [here](../../../scripts/eks/images-to-ecr-uploader/README.md)
 
 ## Step 4: Create Elastic File System (EFS)
 
@@ -117,7 +117,7 @@ We have provided python script to create EFS and link it to EKS cluster, or dire
 The GeoTax Application relies on reference data for performing GeoTax operations. For more information related to reference data, please refer to [this link](../../ReferenceData.md).
 
 
-You can make use of a [miscellaneous helm chart for installing reference data](../../../charts/reference-data-setup/README.md), please follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
+You can make use of a [miscellaneous helm chart for installing reference data](../../../charts/eks/reference-data-setup/README.md), please follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
 ```shell
 helm install geotax-reference-data ./charts/reference-data-setup/ \
 --set "global.pdxApiKey=[your-pdx-key]" \
@@ -142,7 +142,7 @@ helm upgrade --install geotax-application ./charts/geotax-application \
 --set "ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
 --set "global.nodeSelector.node-app=geotax" \
 --set "image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/geotax-service" \
---set "image.tag=1.0.0" \
+--set "image.tag=1.0.1" \
 --namespace geotax-application --create-namespace
 ```
 
@@ -156,7 +156,7 @@ helm upgrade --install geotax-application ./charts/geotax-application \
 * ``image.repository``: The ECR image repository for the geotax image
 * ``global.nodeSelector``: The node selector to run the GeoTax solutions on nodes of the cluster
 
-For more information on helm values, follow [this link](../../../charts/geotax-application/README.md#helm-values).
+For more information on helm values, follow [this link](../../../charts/eks/geotax-application/README.md#helm-values).
 
 ## Step 7: Monitoring GeoTax Helm Chart Installation
 
@@ -171,7 +171,7 @@ kubectl get services --namespace geotax-application
 ```
 
 ## Next Sections
-- [GeoTax API Usage](../../../charts/geotax-application/README.md#geotax-service-api-usage)
+- [GeoTax API Usage](../../../charts/eks/geotax-application/README.md#geotax-service-api-usage)
 - [Metrics, Traces and Dashboard](../../MetricsAndTraces.md)
 - [FAQs](../../faq/FAQs.md)
 

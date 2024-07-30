@@ -54,12 +54,12 @@ GeoTax Service will provide geographical-based determinations, to determine in w
 ## Components
 
 - [Reference Data](docs/ReferenceData.md)
-- [Docker Images](scripts/images-to-ecr-uploader/README.md#description)
-- [Helm Charts](charts/geotax-application/README.md#helm-charts)
+- [Docker Images](scripts/eks/images-to-ecr-uploader/README.md#description)
+- [Helm Charts](charts/eks/geotax-application/README.md#helm-charts)
 
 ## Guides
 
-- [Reference Data Installation](charts/reference-data-setup/README.md)
+- [Reference Data Installation](charts/eks/reference-data-setup/README.md)
 - [Quickstart Guide](docs/guides/eks/QuickStartEKS.md)
 - [Upgrade Guide](docs/guides/eks/UpgradeGuide.md)
 - [Uninstall Guide](docs/guides/eks/UninstallGuide.md)
@@ -67,7 +67,7 @@ GeoTax Service will provide geographical-based determinations, to determine in w
 ## Setup
 
 - [Local Setup](docker-desktop/README.md)
-- [Kubernetes Setup](charts/geotax-application/README.md)
+- [Kubernetes Setup](charts/eks/geotax-application/README.md)
 
 > NOTE: As of now, GeoTax helm chart is only supported for AWS EKS.
 
@@ -75,9 +75,9 @@ GeoTax Service will provide geographical-based determinations, to determine in w
 
 Following is the helm version chart against GeoTax PDX docker image version and Helm Release Version.
 
-| Helm Chart Version → <br> Geotax Docker Image Version (Version/Vintage/ReleaseDate) ↓ | `1.0.0` |
-|---------------------------------------------------------------------------------------|---------|
-| `1.0.0/2024.1/Jan 22, 2024`                                                    | ✔️      |
+| Helm Chart Version → <br> Geotax Docker Image Version (Version/Vintage/ReleaseDate) ↓ | `1.0.0` | `1.0.1` |
+|---------------------------------------------------------------------------------------|---------|---------|
+| `1.0.0/2024.1/Jan 22, 2024`                                                           | ✔️      | ✔️      |
 
 ## Miscellaneous
 
@@ -89,9 +89,9 @@ Following is the helm version chart against GeoTax PDX docker image version and 
 ## References
 
 - [Releases](https://github.com/PreciselyData/cloudnative-geocoding-helm/releases)
-- [Helm Values](charts/geotax-application/README.md#helm-values)
-- [Environment Variables](charts/geotax-application/README.md#environment-variables)
-- [GeoTax Service API Usage](charts/geotax-application/README.md#geotax-service-api-usage)
+- [Helm Values](charts/eks/geotax-application/README.md#helm-values)
+- [Environment Variables](charts/eks/geotax-application/README.md#environment-variables)
+- [GeoTax Service API Usage](charts/eks/geotax-application/README.md#geotax-service-api-usage)
 
 ## Links
 

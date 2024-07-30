@@ -1,0 +1,9 @@
+global:
+  ## Aws region where EFS is installed.
+  awsRegion: us-east-1
+
+  ## Configurations related to AWS Elastic File System
+  nfs:
+    ##
+    ## The `fileSystemId` this is a mandatory parameter as regional-addressing service used the reference data mounted in EFS.
+    fileSystemId: fileSystemId

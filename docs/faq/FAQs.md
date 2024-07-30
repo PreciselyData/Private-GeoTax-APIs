@@ -44,7 +44,7 @@ the FAQs, feel free to reach out to our support team for personalized assistance
    <br><br>
    Helm command will fail mostly because of missing mandatory parameters or not overriding few of the default
    parameters. Apart from mandatory parameters, you can always override the default values in
-   the [values.yaml](../../charts/geotax-application/values.yaml) file by using the --set parameter.
+   the [values.yaml](../../charts/eks/geotax-application/values.yaml) file by using the --set parameter.
 
    However, you can view the logs and fix those issues by cleaning up and rerunning the helm command.
     ```shell
