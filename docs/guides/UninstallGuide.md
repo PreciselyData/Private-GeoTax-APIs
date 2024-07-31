@@ -1,6 +1,6 @@
-[🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)
+[🔗 Return to `Table of Contents` 🔗](../../README.md#guides)
 
-# Uninstall Guide for EKS
+# Uninstall Guide
 
 To uninstall the GeoTax helm chart, run the following command:
 

@@ -3,13 +3,13 @@
 The GeoTax Application requires reference data installed in the worker nodes for running geotax
 capabilities. This reference data should be deployed
 using [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/). This persistent volume is
-backed by Amazon Elastic File System (EFS) so that the data is ready to use immediately when the volume is mounted to
+backed by Network File Storage so that the data is ready to use immediately when the volume is mounted to
 the pods.
 
 For more information on reference data and reference data structure, please
-visit [this link](../../docs/ReferenceData.md).
+visit [this link](../../../docs/ReferenceData.md).
 
-Follow the aforementioned steps for installation of the reference data in the EFS:
+Follow the aforementioned steps for installation of the reference data in the NFS:
 
 ## Step 1: Getting Access to Reference Data
 
@@ -27,6 +27,8 @@ cd ./charts/reference-data-setup/image
 docker build . -t geotax-reference-data-extractor:2.0.0
 ```
 
+##### For AWS EKS:
+
 ```shell
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com
 
@@ -37,10 +39,42 @@ docker tag geotax-reference-data-extractor:2.0.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-R
 docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/geotax-reference-data-extractor:2.0.0
 ```
 
+##### For Azure's AKS:
+
+```shell
+az login
+az acr login --name <registry-name> --subscription <subscription-id>
+
+docker tag geotax-reference-data-extractor:2.0.0 <your-container-registry-name>.azurecr.io/geotax-reference-data-extractor:2.0.0
+
+docker push <your-container-registry-name>.azurecr.io/geotax-reference-data-extractor:2.0.0
+```
+
+##### For Google's GKE:
+
+```shell
+gcloud auth configure-docker --quiet
+docker tag geotax-reference-data-extractor:2.0.0 us.gcr.io/<project-name>/geotax-reference-data-extractor:2.0.0
+docker push us.gcr.io/<project-name>/geotax-reference-data-extractor:2.0.0
+```
+
 ## Step 3: Creating EFS
 
+##### For AWS EKS:
+
 We already have scripts to create EFS and link to the current EKS cluster. Please follow the steps
-mentioned [here](../../scripts/efs-creator/README.md) to create EFS.
+mentioned [here](../../../scripts/eks/efs-creator/README.md) to create EFS.
+
+##### For Microsoft AKS:
+
+Please follow the instructions and link to create mounted storage
+mentioned [here](../../../docs/guides/aks/QuickStartAKS.md#step-4-create-and-configure-azure-files-share).
+
+##### For Google's GKE:
+
+Please follow the instructions and link to create mounted storage
+mentioned [here](../../../docs/guides/gke/QuickStartGKE.md#step-4-create-and-configure-google-filestore).
+
 
 ## Step 4: Running the Reference Data Installation Helm Chart
 
@@ -50,8 +84,7 @@ Run the below command for installation of reference data in EFS:
 helm install geotax-reference-data ./charts/reference-data-setup/ \
 --set "global.pdxApiKey=[your-pdx-key]" \
 --set "global.pdxSecret=[your-pdx-secret]" \
---set "global.efs.fileSystemId=[fileSystemId]" \
---set "dataDownload.image.repository=[reference-data-image-repository]" \
+--set "geotax-reference-data.dataDownload.image.repository=[reference-data-image-repository]" \
 --set "global.dataConfigMap=[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]" \
 --dependency-update --timeout 60m
 ```
@@ -81,8 +114,6 @@ provided by this chart:
 |----------------------------|------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *`global.pdxApiKey`        | the apiKey of your PDX account                             | `pdx-api-key`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | *`global.pdxSecret`        | the secret key of your PDX account                         | `pdx-api-secret`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `global.awsRegion`         | the aws region of created EFS                              | `us-east-1`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| *`global.efs.fileSystemId` | the EFS Id                                                 | `fileSystemId`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `global.dataConfigMap`     | a Map of reference data to be downloaded against countries | `[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]` |
 
 <hr>
@@ -132,4 +163,4 @@ kubectl get pods -w
 kubectl logs -f -l "app.kubernetes.io/name=geotax-reference-data"
 ```
 
-[🔗 Return to `Table of Contents` 🔗](../../README.md#guides)
+[🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)

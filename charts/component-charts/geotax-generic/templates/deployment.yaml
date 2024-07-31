@@ -96,7 +96,7 @@ spec:
             - name: AUTH_ENABLED
               value: "false"
             - name: KAFKA_ENABLED
-              value: "true"
+              value: "false"
             - name: IS_HELM_SOLUTION
               value: "true"
       {{- with .Values.global.nodeSelector }}

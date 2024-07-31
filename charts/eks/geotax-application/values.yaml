@@ -5,5 +5,5 @@ global:
   ## Configurations related to AWS Elastic File System
   nfs:
     ##
-    ## The `fileSystemId` this is a mandatory parameter as regional-addressing service used the reference data mounted in EFS.
+    ## The `fileSystemId` this is a mandatory parameter as geotax service used the reference data mounted in EFS.
     fileSystemId: fileSystemId

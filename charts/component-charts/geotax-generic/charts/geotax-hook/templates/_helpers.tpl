@@ -31,11 +31,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "geotax-hook.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-volumeMounts
-*/}}
-{{- define "addressing-hook.volumeMounts" -}}
-- name: geotax-host-volume
-  mountPath: {{ .Values.global.nfs.volumeMountPath }}
-{{- end }}

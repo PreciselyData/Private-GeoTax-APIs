@@ -1,7 +1,7 @@
 controller:
   replicaCount: 3
   nodeSelector:
-    node-app: geo-addressing-ingress
+    node-app: geotax-ingress
   autoscaling:
     enabled: true
   resources:

@@ -1,4 +1,4 @@
-[🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)
+[🔗 Return to `Table of Contents` 🔗](../../README.md#guides)
 
 # Upgrade Guide
 

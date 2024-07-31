@@ -2,7 +2,10 @@
 
 ## Getting Started
 
-To get started with installation of helm chart, follow this [Quick Start Guide](../../docs/guides/eks/QuickStartEKS.md)
+To get started with installation of helm chart, follow:
+<br><br>For AWS EKS: [Quick Start Guide for EKS](../../../docs/guides/eks/QuickStartEKS.md)
+<br>For Azure's AKS: [Quick Start Guide for AKS](../../../docs/guides/aks/QuickStartAKS.md)
+<br>For Google's GKE: [Quick Start Guide for GKE](../../../docs/guides/gke/QuickStartGKE.md)
 
 ## Helm charts
 
@@ -37,6 +40,7 @@ provided by this chart:
 
 | Parameter                        | Description                                | Default                |
 |----------------------------------|--------------------------------------------|------------------------|
+| `ingress.enabled`                | ingress is disabled by default             | `false`                |
 | `ingress.hosts[0].host`          | the ingress host url base path             | `geotax.precisely.com` |
 | `ingress.hosts[0].paths[0].path` | the base path for accessing geotax service | `/precisely/geotax`    |
 
@@ -49,10 +53,8 @@ provided by this chart:
 
 | Parameter                                              | Description                                                                                                                                                                             | Default                              |
 |--------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
-| `global.awsRegion`                                     | the region for where elastic file system is present.                                                                                                                                    | `us-east-1`                          |
-| `global.efs.fileSystemId`                              | the fileSystemId of the elastic file system (e.g. fs-0d49e756a)                                                                                                                         | `fileSystemId`                       |
-| `global.efs.volumeMountPath`                           | the mount path of the geotax data                                                                                                                                                       | `/mnt/data/geotax-data`              |
-| `global.efs.geotaxBasePath`                            | the base path of the folder geotax data is present                                                                                                                                      | `geotax`                             |
+| `global.nfs.volumeMountPath`                           | the mount path of the geotax data                                                                                                                                                       | `/mnt/data/geotax-data`              |
+| `global.nfs.geotaxBasePath`                            | the base path of the folder geotax data is present                                                                                                                                      | `geotax`                             |
 | `global.manualDataConfig.enabled`                      | the flag to indicate whether geotax data manual configuration should be enabled. The manualDataConfig disables the geotax hook for automatic identification of the latest vintage data. | `false`                              |
 | `global.manualDataConfig.nameOverride`                 | the overridden name of the geotax data config                                                                                                                                           | `geotax-data-mnl-config`             |
 | `global.manualDataConfig.configMapData.geotax.vintage` | the actual folder path where geotax-data is present                                                                                                                                     | `/mnt/data/geotax-data/202312181321` |
@@ -71,12 +73,12 @@ NOTE: `*` indicates that we recommend not to modify those values during installa
 
 Refer to [this file](templates/deployment.yaml) for overriding the environment variables for geotax.
 
-| Parameter                      | Description                                                                 | Default                              |
-|--------------------------------|-----------------------------------------------------------------------------|--------------------------------------|
-| `*DATA_PATH`                   | The folder path of the geotax data                                          | `<referred from configmap>`          |
-| `*AUTH_ENABLED`                | Flag to indicate whether authorization is enabled for the endpoints or not. | `false`                              |
-| `*SDK_BLOCKING_THREADS`        | No of blocking threads                                                      | `16`                                 |
-| `*SDK_BLOCKING_QUEUE_CAPACITY` | The queue capacity of threads                                               | `100000`                             |
+| Parameter                      | Description                                                                 | Default                     |
+|--------------------------------|-----------------------------------------------------------------------------|-----------------------------|
+| `*DATA_PATH`                   | The folder path of the geotax data                                          | `<referred from configmap>` |
+| `*AUTH_ENABLED`                | Flag to indicate whether authorization is enabled for the endpoints or not. | `false`                     |
+| `*SDK_BLOCKING_THREADS`        | No of blocking threads                                                      | `16`                        |
+| `*SDK_BLOCKING_QUEUE_CAPACITY` | The queue capacity of threads                                               | `100000`                    |
 
 <hr>
 </details>
@@ -85,14 +87,15 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 
 The GeoTax service exposes an API which is `/v1/geo-tax/address`
 
-You can use the [postman collection](../../scripts/GeoTax-Helm.postman_collection.json) provided in the
+You can use the [postman collection](../../../scripts/GeoTax-Helm.postman_collection.json) provided in the
 repository for hitting the APIs.
 
 API and sample request is provided below:
 
 ### `/v1/geo-tax/address`:
 
-This endpoint takes a single input address and determines which tax jurisdiction a given address is located in, and which current tax codes apply.
+This endpoint takes a single input address and determines which tax jurisdiction a given address is located in, and
+which current tax codes apply.
 
 Sample Request:
 
@@ -124,6 +127,7 @@ curl --location 'http://[geotax-host-url]/v1/geo-tax/address' --header 'Content-
 ```
 
 Response:
+
 ```curl
 {
     "response": {
@@ -214,4 +218,5 @@ Response:
     }
 }
 ```
-[🔗 Return to `Table of Contents` 🔗](../../README.md#components)
+
+[🔗 Return to `Table of Contents` 🔗](../../../README.md#components)
