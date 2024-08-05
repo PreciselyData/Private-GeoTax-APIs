@@ -1,0 +1,155 @@
+###################################################################
+## CONFIG | GeoTax Application
+###################################################################
+
+## The number of geotax pods to run
+replicaCount: 1
+
+## Configuration for the geotax-application-service container image.
+## We recommend that you always download the latest version of the geotax-application-image before running the Helm chart.
+##
+## - Please visit the official 'Precisely Data Experience' website to download container images:
+##   https://data.precisely.com/products
+image:
+  repository: geotax-service
+  pullPolicy: Always
+  tag: 2.0.0
+imagePullSecrets: [ ]
+
+## This will override the name of the installed geotax deployment.
+nameOverride: "geotax"
+fullnameOverride: "geotax"
+
+## A service account will be created by default.
+serviceAccount:
+  create: true
+  annotations: { }
+  name: ""
+
+## podAnnotations for geotax deployments
+podAnnotations: { }
+## The security context for the geotax Pods
+## - spec for PodSecurityContext:
+##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
+##
+podSecurityContext: { }
+securityContext: { }
+
+## Configs for the service of the geotax deployment
+service:
+  type: ClusterIP
+  port: 80
+
+
+###################################
+## CONFIG | Kubernetes Ingress
+###################################
+ingress:
+  ## By default, ingress is enabled for geotax service
+  enabled: true
+  ## The Ingress Class for the web Ingress
+  ## - [WARNING] requires Kubernetes 1.18 or later, use "kubernetes.io/ingress.class" annotation for older versions
+  className: ""
+  ## Annotations for the Ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  hosts:
+    ## The host for the Ingress
+    ## [WARNING] Do NOT provide regex while providing path, it's already handled in the ingress.yaml
+    ## ____ EXAMPLE _______________
+    ##   # webserver URL: geotax.precisely.com
+    ##   # path: "/precisely/geotax"
+    ##
+    - host: geotax.precisely.com
+      paths:
+        - path: /precisely/geotax
+          pathType: ImplementationSpecific
+  tls: [ ]
+
+## Resource requests/limits for the geotax pods
+## - spec for ResourceRequirements:
+##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core
+##
+## The default recommended resources requests for geotax service is:
+##    requests:
+##      cpu: 1
+##      memory: 1.5Gi
+resources:
+  requests:
+    cpu: 1
+    memory: 4Gi
+  limits:
+    memory: 8Gi
+
+## Configurations for the HorizontalPodAutoscaler of the geotax pods
+##
+## [WARNING]: To ensure efficient operation of the HorizontalPodAutoscaler, you must have the Metrics API server
+## installed in your Kubernetes Cluster.
+##
+## To install the Metrics API server, please use the following command:
+## `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
+##
+## For the geotax service, autoscaling is enabled by default to handle large workloads.
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 60
+
+## The toleration configs for the geotax pods
+## - spec for Toleration:
+##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
+##
+tolerations: [ ]
+
+## the affinity configs for the geotax pods
+## - spec for Affinity:
+##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
+##
+affinity: { }
+
+## Global configurations will be applicable and referred in every dependent helm chart
+## - for more information on global parameter of helm, refer to:
+##    https://helm.sh/docs/chart_template_guide/subcharts_and_globals/
+global:
+  ## Configurations related to Network File Storage
+  nfs:
+    ##
+    ## The base path where the volume should be mounted inside the container.
+    volumeMountPath: /mnt/data/geotax-data
+    ##
+    ## The base path where the geotax reference data in extracted
+    geotaxBasePath: geotax
+  ##
+  ## The nodeSelector configs for the geotax pods
+  ## - docs for nodeSelector:
+  ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+  ##
+  nodeSelector: { }
+  ##
+  ## OTEL_EXPORTER_OTLP_ENDPOINT is the endpoint from which otlp traces are collected.
+  ## You can replace the value, if jaeger is not being used as trace collector.
+  ## For more information, refer to https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
+  ## For information related to Jaeger installation, refer to https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger
+  ## Example endpoind http://jaeger-collector.default.svc.cluster.local:4317
+  otelExporterEndpoint: ""
+
+  ## Configuration for manually configuring the data mount path for geotax-service
+  ## When doing the manual configuration for data mount path, disable the data-vintage
+  ## job by setting geotax-hook.enabled=false
+  ##
+  ## This configuration will be useful if you want to mount a specific data folder for geotax.
+  ## Please update the configMapData parameters as required.
+  manualDataConfig:
+    enabled: false
+    nameOverride: geotax-data-mnl-config
+    configMapData:
+      geotax.vintage: /mnt/data/geotax-data/202312181321
+
+## geotax-hook is used to identify the latest vintage of reference data to mount to the geotax containers.
+## In case, if you want to provide a specific reference data vintage, use the `global.manualDataConfig` parameters and disable geotax-hook.
+geotax-hook:
+  ## Config for enabling or disabling `data-vintage` job hook.
+  enabled: true

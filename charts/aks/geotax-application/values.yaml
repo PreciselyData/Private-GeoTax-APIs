@@ -1,0 +1,12 @@
+## Global configurations will be applicable and referred in every dependent helm chart
+## - for more information on global parameter of helm, refer to:
+##    https://helm.sh/docs/chart_template_guide/subcharts_and_globals/
+global:
+  ## Configurations related to Network File System
+  nfs:
+    ##
+    ## The Azure Storage Name
+    shareName: geotaxshare
+    ##
+    ## The Azure Storage Account ID
+    storageAccount: geotax

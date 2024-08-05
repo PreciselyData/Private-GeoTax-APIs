@@ -1,0 +1,34 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "geotax-pv.name" . }}
+  finalizers: [ ]
+  labels:
+    {{- include "geotax-pv.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  volumeMode: Filesystem
+  nfs:
+    path: {{ .Values.global.nfs.path }}
+    server: {{ .Values.global.nfs.server }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "geotax-pvc.name" . }}
+  finalizers: [ ]
+  labels:
+    {{- include "geotax-pvc.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{ include "geotax-pv.name" . }}
+  storageClassName: ""

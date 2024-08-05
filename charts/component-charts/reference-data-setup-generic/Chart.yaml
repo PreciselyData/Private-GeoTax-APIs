@@ -1,0 +1,6 @@
+apiVersion: v2
+name: geotax-reference-data
+description: A Helm chart for Installation of GeoTax Reference Data
+type: application
+version: 2.0.0
+appVersion: "1.16.0"

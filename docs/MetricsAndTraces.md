@@ -10,7 +10,7 @@ your application.
 
 ### Exposed Metrics
 
-Following are the metrics exposed by Regional-Addressing Application:
+Following are the metrics exposed by Geotax Application:
 
 > click the `▶` symbol to expand
 

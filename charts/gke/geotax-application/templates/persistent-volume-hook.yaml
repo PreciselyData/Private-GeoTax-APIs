@@ -1,0 +1,46 @@
+{{- if index .Values "geotax" "geotax-hook" "enabled" }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "geotax-hook-pv.name" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  labels:
+    {{- include "geotax-hook-pv.labels" . | nindent 4 }}
+  finalizers: [ ]
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  volumeMode: Filesystem
+  nfs:
+    path: {{ .Values.global.nfs.path }}
+    server: {{ .Values.global.nfs.server }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "geotax-hook-pvc.name" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  finalizers: [ ]
+  labels:
+    {{- include "geotax-hook-pvc.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{ include "geotax-hook-pv.name" . }}
+  storageClassName: ""
+{{- end }}

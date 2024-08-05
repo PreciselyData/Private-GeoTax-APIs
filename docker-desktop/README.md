@@ -5,7 +5,7 @@ The GeoTax application can be setup locally for test purpose.
 ## Step 1: Download Reference Data and Required Docker Images
 
 To run the docker images locally, reference data and docker images should be downloaded from Precisely Data Experience.
-> For more information on downloading the docker images, follow [this section](../scripts/images-to-ecr-uploader/README.md#download-and-upload-docker-images-to-ecr).
+> For more information on downloading the docker images, follow [this section](../scripts/eks/images-to-ecr-uploader/README.md#download-and-upload-docker-images-to-ecr).
 > 
 > For more information on reference data and downloading docker images, follow [this section](../docs/ReferenceData.md).
 >
@@ -51,6 +51,6 @@ _SERVICE_PORT -> port at which service should be started (Example 8080)
 
 ## References
 
-- [Sample API Usage](../charts/geotax-application/README.md#geotax-service-api-usage)
+- [Sample API Usage](../charts/eks/geotax-application/README.md#geotax-service-api-usage)
 
 [🔗 Return to `Table of Contents` 🔗](../README.md#setup)
