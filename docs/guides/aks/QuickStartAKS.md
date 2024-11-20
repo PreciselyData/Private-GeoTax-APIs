@@ -109,8 +109,8 @@ You can run the following commands after extracting the zipped docker image:
 cd ./geotax-images
 az acr login --name <registry-name> --subscription <subscription-id>
 docker load -i ./geotax-service.tar
-docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geotax-service:2.0.0
-docker push <your-container-registry-name>.azurecr.io/geotax-service:2.0.0
+docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
+docker push <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
 ```
 
 ## Step 4: Create and Configure Azure Files Share
