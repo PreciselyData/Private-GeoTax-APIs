@@ -12,6 +12,7 @@ services:
       - ${_DATA_PATH:-/data/extracted}:/mnt/data/extracted
     environment:
       - DATA_PATH=/mnt/data/extracted
+      - AUTH_ENABLED=false
     networks:
       - precisely-geotax
     restart: always
