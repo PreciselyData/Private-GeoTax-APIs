@@ -19,6 +19,9 @@
 								{
 									"name": "Determines tax jurisdiction and tax codes of given address",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "POST",
 										"header": [
 											{
@@ -37,7 +40,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+											"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -467,6 +470,31 @@
 										}
 									]
 								}
+							],
+							"auth": {
+								"type": "noauth"
+							},
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"packages": {},
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"packages": {},
+										"exec": [
+											""
+										]
+									}
+								}
 							]
 						},
 						{
@@ -496,7 +524,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+											"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -926,9 +954,84 @@
 										}
 									]
 								}
+							],
+							"auth": {
+								"type": "noauth"
+							},
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"packages": {},
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"packages": {},
+										"exec": [
+											""
+										]
+									}
+								}
 							]
 						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
 					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
