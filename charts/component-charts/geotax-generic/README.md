@@ -126,7 +126,6 @@ curl --location 'http://{{baseUrl}}/v1/geo-tax/address' \
       "matchMode": "RELAXED"
     },
     "output": {
-      "taxDistrict": "SPD",
       "salesTaxRateType": "CONSTRUCTION",
       "outputCasing": "UPPER"
     }
@@ -159,7 +158,6 @@ curl --location 'http://{{baseUrl}}/v1/geo-tax/location' \
       "matchMode": "EXACT"
     },
     "output": {
-      "taxDistrict": "IPD",
       "salesTaxRateType": "NONE",
       "outputCasing": "UPPER"
     }
