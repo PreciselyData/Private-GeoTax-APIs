@@ -130,11 +130,12 @@ Deploy the geotax application using helm. Follow the guides to get the steps for
 
 Following is the helm version chart against GeoTax PDX docker image version and Helm Release Version.
 
-| Helm Chart Version → <br> Geotax Docker Image Version (Version/Vintage/ReleaseDate) ↓ | `1.0.0` | `2.0.0` |
-|---------------------------------------------------------------------------------------|---------|---------|
-| `1.0.0/2024.1/Jan 22, 2024`                                                           | ✔️      | ❌       |
-| `1.0.0/2024.4/Apr 18, 2024`                                                           | ✔️      | ❌       |
-| `1.0.0/2024.8/Aug 5, 2024`                                                            | ✔️      | ✔️      |
+| Geotax Docker Image Version (Version/Vintage/ReleaseDate) ↓ | Supported Chart Version|
+|---------------------------------------------------------------------------------------|---------|
+| `1.0.0/2024.1/Jan 22, 2024`                                                           | `1.0.0`      |
+| `1.0.0/2024.4/Apr 18, 2024`                                                           | `1.0.0`      |
+| `2.0.0/2024.8/Aug 5, 2024`                                                            | `1.0.0 - 2.0.0` |
+| `3.0.0/2024.11/Nov 20, 2024`                                                            | `3.0.0` |
 
 Refer Downloading GeoTax Docker Images
 for [[EKS](docs/guides/eks/QuickStartEKS.md#step-3-download-geotax-docker-images) |[AKS](/docs/guides/aks/QuickStartAKS.md#step-3-download-geotax-docker-images) |[GKE](/docs/guides/gke/QuickStartGKE.md#step-3-download-geotax-docker-images)]

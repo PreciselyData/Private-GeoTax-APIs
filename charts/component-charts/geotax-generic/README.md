@@ -30,7 +30,7 @@ provided by this chart:
 | Parameter          | Description                            | Default          |
 |--------------------|----------------------------------------|------------------|
 | `image.repository` | the geotax container image repository  | `geotax-service` |
-| `image.tag`        | the geotax container image version tag | `2.0.0`          |
+| `image.tag`        | the geotax container image version tag | `3.0.0`          |
 
 <hr>
 </details>
@@ -77,7 +77,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 |--------------------------------|-----------------------------------------------------------------------------|-----------------------------|
 | `*DATA_PATH`                   | The folder path of the geotax data                                          | `<referred from configmap>` |
 | `*AUTH_ENABLED`                | Flag to indicate whether authorization is enabled for the endpoints or not. | `false`                     |
-| `*SDK_BLOCKING_THREADS`        | No of blocking threads                                                      | `16`                        |
+| `*SDK_BLOCKING_THREADS`        | No of blocking threads                                                      | `24`                        |
 | `*SDK_BLOCKING_QUEUE_CAPACITY` | The queue capacity of threads                                               | `100000`                    |
 
 <hr>
@@ -85,7 +85,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 
 ## GeoTax Service API Usage
 
-The GeoTax service exposes an API which is `/v1/geo-tax/address`
+The GeoTax service exposes an API which is `/v1/geo-tax/address` & `/v1/geo-tax/location`
 
 You can use the [postman collection](../../../scripts/GeoTax-Helm.postman_collection.json) provided in the
 repository for hitting the APIs.
@@ -94,129 +94,77 @@ API and sample request is provided below:
 
 ### `/v1/geo-tax/address`:
 
-This endpoint takes a single input address and determines which tax jurisdiction a given address is located in, and
-which current tax codes apply.
+This endpoint takes a single input address and determines which tax jurisdiction a given address is located in, and which current tax codes apply.
 
 Sample Request:
 
 ```curl
-curl --location 'http://[geotax-host-url]/v1/geo-tax/address' --header 'Content-Type: application/json' --data '{
-    "preferences": {
-        "output": {
-            "taxDistrict": "NONE",
-            "taxCrossReferenceKey": "NONE",
-            "salesTaxRateType": "NONE",
-            "outputCasing": "UPPER"
-        },
-        "geocoding": {
-            "defaultBufferWidth": "0",
-            "latLongOffset": "NONE",
-            "squeeze": "NO",
-            "latLongAltFormat": "DecimalSign"
-        },
-        "matching": {
-            "matchMode": "CLOSE"
-        }
+curl --location 'http://{{baseUrl}}/v1/geo-tax/address' \
+--header 'X-Request-Id: <string>' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data '{
+  "address": {
+    "addressLines": [
+      "<string>",
+      "<string>"
+    ],
+    "admin1": "<string>",
+    "admin2": "<string>",
+    "city": "<string>",
+    "postalCode": "<string>",
+    "postalCodeExt": "<string>"
+  },
+  "preferences": {
+    "geocoding": {
+      "defaultBufferWidth": 0,
+      "latLongOffset": "60",
+      "squeeze": "YES",
+      "latLongAltFormat": "DecimalDirectional"
     },
-    "address": {
-        "addressLines": [
-            "2001 Main St, Eagle Butte, SD 57625"
-        ]
+    "matching": {
+      "matchMode": "RELAXED"
+    },
+    "output": {
+      "taxDistrict": "SPD",
+      "salesTaxRateType": "CONSTRUCTION",
+      "outputCasing": "UPPER"
     }
+  }
 }'
 ```
 
-Response:
+### `v1/geo-tax/location`:
+
+This endpoint takes a latitude and longitude as input and determines which tax jurisdiction a given address is located in, and which current tax codes apply.
 
 ```curl
-{
-    "response": {
-        "status": "OK",
-        "result": {
-            "gnisCode": "001267480",
-            "confidence": 100.0,
-            "jurisdiction": {
-                "state": {
-                    "code": "46",
-                    "name": "SD"
-                },
-                "county": {
-                    "code": "035",
-                    "name": "DAVISON"
-                },
-                "place": {
-                    "name": "MITCHELL",
-                    "code": "43100",
-                    "gnisCode": "001267480",
-                    "classCode": "C5",
-                    "incorporatedFlag": "Inc",
-                    "lastAnnexedDate": "01/2020",
-                    "lastUpdatedDate": "10/2023",
-                    "lastVerifiedDate": "09/2023",
-                    "pointStatus": "P",
-                    "distanceToBorder": "1776"
-                },
-                "geoTaxKeyMatchCode": " "
-            },
-            "matchedAddress": {
-                "formattedAddress": "2001 N MAIN ST MITCHELL, SD  57301",
-                "formattedStreetAddress": "2001 N MAIN ST",
-                "formattedLocationAddress": "MITCHELL, SD  57301",
-                "addressNumber": "2001",
-                "stateName": "SD",
-                "countyName": "DAVISON",
-                "cityName": "MITCHELL",
-                "postalCode": "57301",
-                "placeName": "MITCHELL",
-                "street": "MAIN",
-                "dataTypeName": "TOMTOM STREETS",
-                "genRC": "S",
-                "locationCode": "AS0",
-                "matchCode": "TB21",
-                "numCandidates": "0",
-                "houseNumber": "2001",
-                "preDirectional": "N",
-                "streetType": "ST"
-            },
-            "census": {
-                "block": "050",
-                "blockGroup": "5",
-                "cbsa": {
-                    "name": "MITCHELL, SD MICROPOLITAN STATISTICAL AREA",
-                    "code": "33580",
-                    "metroFlag": "N"
-                },
-                "matchLevel": "Street",
-                "matchCode": "S",
-                "tract": "962700",
-                "mcd": {
-                    "name": "MITCHELL CITY",
-                    "code": "43100",
-                    "pointStatus": "P",
-                    "distanceToBorder": "1776"
-                },
-                "cbsad": {},
-                "csa": {
-                    "code": "null"
-                }
-            },
-            "latLongFields": {
-                "matchCode": "R",
-                "matchLevel": "Rooftop",
-                "geometry": {
-                    "latLongAltFmt": "DecimalSign",
-                    "latLongAltFmtValue": "43.731783-098.025936",
-                    "type": "Point",
-                    "coordinates": [
-                        43.731783,
-                        -98.025936
-                    ]
-                }
-            },
-            "numTaxDistrictsFound": 0
-        }
+curl --location 'http://{{baseUrl}}/v1/geo-tax/location' \
+--header 'X-Request-Id: <string>' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data '{
+  "location": {
+    "latitude": "<double>",
+    "longitude": "<double>"
+  },
+  "preferences": {
+    "geocoding": {
+      "defaultBufferWidth": 0,
+      "latLongOffset": "20",
+      "squeeze": "YES",
+      "latLongAltFormat": "DecimalSign"
+    },
+    "matching": {
+      "matchMode": "EXACT"
+    },
+    "output": {
+      "taxDistrict": "IPD",
+      "salesTaxRateType": "NONE",
+      "outputCasing": "UPPER"
     }
-}
+  }
+}'
 ```
 
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#components)

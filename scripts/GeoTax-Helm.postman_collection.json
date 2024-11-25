@@ -1,42 +1,936 @@
 {
 	"info": {
-		"_postman_id": "cde25853-3ed5-4b82-8cd5-1c21fc533199",
-		"name": "GeoTax-Helm",
+		"_postman_id": "4f6f5f31-390f-4594-bb6a-fbdc58d9ea15",
+		"name": "GeoTAX APIs",
+		"description": "GeoTAX service will provide geographical-based determinations, to determine in which tax jurisdiction a given address is located, and which current tax codes apply.\nGeoTAX uses the most precise geographic data available to assign state, county, township, municipal, school, and other appropriate tax type information to an address.\n<details>\n    <summary>Error Codes</summary>\n\nAPIs will return the following error codes in case of any error:\n\n\n| Error Code                 | Description\n|----------------------------|-------------------------------------------------------\n| DIS-1001                   | Unauthorized, Invalid token\n| DIS-1002                   | Not Authorized to access this API\n| DIS-1003                   | Issue with internal services\n| DIS-1004                   | Workspace Id is missing from Bearer Token\n| DIS-1006                   | Unauthorized, Invalid key/secret\n| DIS-1008                   | Invalid request ID, maximum allowed length is 38 characters\n| DIS-TAX-1001               | Request Body is not valid\n| DIS-TAX-1002               | Request body is not specified in the request\n</details>\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20013413",
-		"_collection_link": "https://snowflake-ss4bd.postman.co/workspace/Team-Workspace~cdff7aff-bba4-49e1-8832-a674abc5d18c/collection/20013413-cde25853-3ed5-4b82-8cd5-1c21fc533199?action=share&source=collection_link&creator=20013413"
+		"_exporter_id": "29790689"
 	},
 	"item": [
 		{
-			"name": "GEOTAX",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"preferences\": {\r\n        \"output\": {\r\n            \"taxDistrict\": \"NONE\",\r\n            \"taxCrossReferenceKey\": \"NONE\",\r\n            \"salesTaxRateType\": \"NONE\",\r\n            \"outputCasing\": \"UPPER\"\r\n        },\r\n        \"geocoding\": {\r\n            \"defaultBufferWidth\": \"0\",\r\n            \"latLongOffset\": \"NONE\",\r\n            \"squeeze\": \"NO\",\r\n            \"latLongAltFormat\": \"DecimalSign\"\r\n        },\r\n        \"matching\": {\r\n            \"matchMode\": \"CLOSE\"\r\n        }\r\n    },\r\n    \"address\": {\r\n        \"addressLines\": [\r\n            \"2001 Main St, Eagle Butte, SD 57625\"\r\n        ]\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "v1",
+			"item": [
+				{
+					"name": "geo-tax",
+					"item": [
+						{
+							"name": "address",
+							"item": [
+								{
+									"name": "Determines tax jurisdiction and tax codes of given address",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Request-Id",
+												"value": "<string>",
+												"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/geo-tax/address",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"geo-tax",
+												"address"
+											]
+										},
+										"description": "# Overview\nThis endpoint takes a single input address and determines which tax jurisdiction a given address is located in, and which current tax codes apply.\n"
+									},
+									"response": [
+										{
+											"name": "Tax Details Retrieved Successfully ",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"response\": {\n    \"status\": \"SERVICE_UNAVAILABLE\",\n    \"errorMessage\": \"<string>\",\n    \"result\": {\n      \"objectId\": \"<string>\",\n      \"gnisCode\": \"<string>\",\n      \"preciselyId\": \"<string>\",\n      \"confidence\": \"<double>\",\n      \"jurisdiction\": {\n        \"state\": {\n          \"code\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        \"county\": {\n          \"code\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        \"place\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\",\n          \"gnisCode\": \"<string>\",\n          \"selfCollected\": \"<boolean>\",\n          \"classCode\": \"<string>\",\n          \"incorporatedFlag\": \"<string>\",\n          \"lastAnnexedDate\": \"<string>\",\n          \"lastUpdatedDate\": \"<string>\",\n          \"lastVerifiedDate\": \"<string>\",\n          \"pointStatus\": \"<string>\",\n          \"distanceToBorder\": \"<string>\",\n          \"confidence\": \"<string>\"\n        },\n        \"geoTaxKey\": \"<string>\",\n        \"geoTaxKeyMatchCode\": \"<string>\",\n        \"spds\": [\n          {\n            \"districtName\": \"<string>\",\n            \"districtCode\": \"<string>\",\n            \"districtNumber\": \"<string>\",\n            \"versionDate\": \"<string>\",\n            \"effectiveDate\": \"<string>\",\n            \"compiledDate\": \"<string>\",\n            \"updateDate\": \"<string>\",\n            \"boundaryBuffer\": {\n              \"bufferRelation\": {\n                \"description\": \"<string>\",\n                \"value\": \"<string>\"\n              },\n              \"distanceToBorder\": {\n                \"unit\": \"<string>\",\n                \"value\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"districtName\": \"<string>\",\n            \"districtCode\": \"<string>\",\n            \"districtNumber\": \"<string>\",\n            \"versionDate\": \"<string>\",\n            \"effectiveDate\": \"<string>\",\n            \"compiledDate\": \"<string>\",\n            \"updateDate\": \"<string>\",\n            \"boundaryBuffer\": {\n              \"bufferRelation\": {\n                \"description\": \"<string>\",\n                \"value\": \"<string>\"\n              },\n              \"distanceToBorder\": {\n                \"unit\": \"<string>\",\n                \"value\": \"<string>\"\n              }\n            }\n          }\n        ]\n      },\n      \"matchedAddress\": {\n        \"formattedAddress\": \"<string>\",\n        \"formattedStreetAddress\": \"<string>\",\n        \"formattedLocationAddress\": \"<string>\",\n        \"addressNumber\": \"<string>\",\n        \"stateName\": \"<string>\",\n        \"countyName\": \"<string>\",\n        \"cityName\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"postalCodeExt\": \"<string>\",\n        \"placeName\": \"<string>\",\n        \"unit\": \"<string>\",\n        \"unitType\": \"<string>\",\n        \"street\": \"<string>\",\n        \"firmName\": \"<string>\",\n        \"dataTypeName\": \"<string>\",\n        \"genRC\": \"<string>\",\n        \"locationCode\": \"<string>\",\n        \"matchCode\": \"<string>\",\n        \"numCandidates\": \"<string>\",\n        \"urbanization\": \"<string>\",\n        \"houseNumber\": \"<string>\",\n        \"preDirectional\": \"<string>\",\n        \"streetType\": \"<string>\",\n        \"postDirectional\": \"<string>\"\n      },\n      \"salesTax\": {\n        \"totalTaxRate\": \"<double>\",\n        \"stateTaxRate\": \"<double>\",\n        \"countyTaxRate\": \"<double>\",\n        \"municipalTaxRate\": \"<double>\",\n        \"resultCode\": \"<string>\",\n        \"spdsTax\": [\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          },\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          }\n        ]\n      },\n      \"useTax\": {\n        \"totalTaxRate\": \"<double>\",\n        \"stateTaxRate\": \"<double>\",\n        \"countyTaxRate\": \"<double>\",\n        \"municipalTaxRate\": \"<double>\",\n        \"resultCode\": \"<string>\",\n        \"spdsTax\": [\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          },\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          }\n        ]\n      },\n      \"census\": {\n        \"block\": \"<string>\",\n        \"blockGroup\": \"<string>\",\n        \"cbsa\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\",\n          \"metroFlag\": \"<string>\"\n        },\n        \"matchLevel\": \"<string>\",\n        \"matchCode\": \"<string>\",\n        \"tract\": \"<string>\",\n        \"mcd\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\",\n          \"pointStatus\": \"<string>\",\n          \"distanceToBorder\": \"<string>\",\n          \"confidence\": \"<string>\"\n        },\n        \"cbsad\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\"\n        },\n        \"csa\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\"\n        }\n      },\n      \"latLongFields\": {\n        \"matchCode\": \"<string>\",\n        \"matchLevel\": \"<string>\",\n        \"geometry\": {\n          \"latLongAltFmt\": \"<string>\",\n          \"latLongAltFmtValue\": \"<string>\",\n          \"type\": \"<string>\",\n          \"coordinates\": [\n            \"<double>\",\n            \"<double>\"\n          ]\n        }\n      },\n      \"numTaxDistrictsFound\": \"<integer>\",\n      \"ipds\": [\n        {\n          \"districtID\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": {\n            \"description\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          \"taxCodeDescription\": \"<string>\",\n          \"notes\": \"<string>\",\n          \"effectiveDate\": \"<string>\",\n          \"expirationDate\": \"<string>\",\n          \"versionDate\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"changeDate\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          },\n          \"rates\": [\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        },\n        {\n          \"districtID\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": {\n            \"description\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          \"taxCodeDescription\": \"<string>\",\n          \"notes\": \"<string>\",\n          \"effectiveDate\": \"<string>\",\n          \"expirationDate\": \"<string>\",\n          \"versionDate\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"changeDate\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          },\n          \"rates\": [\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        }\n      ],\n      \"ptds\": [\n        {\n          \"id\": \"<string>\",\n          \"districtId\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"municipalEMSTax\": \"<string>\",\n          \"municipalIncomeTax\": \"<string>\",\n          \"schoolDistrictEMSTax\": \"<string>\",\n          \"schoolDistrictIncomeTax\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          }\n        },\n        {\n          \"id\": \"<string>\",\n          \"districtId\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"municipalEMSTax\": \"<string>\",\n          \"municipalIncomeTax\": \"<string>\",\n          \"schoolDistrictEMSTax\": \"<string>\",\n          \"schoolDistrictIncomeTax\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          }\n        }\n      ],\n      \"ptc\": {\n        \"matchCode\": \"<string>\",\n        \"ptcs\": [\n          {\n            \"payrollCode\": \"<string>\",\n            \"payrollDescription\": \"<string>\",\n            \"payrollFlag\": \"<string>\"\n          },\n          {\n            \"payrollCode\": \"<string>\",\n            \"payrollDescription\": \"<string>\",\n            \"payrollFlag\": \"<string>\"\n          }\n        ]\n      },\n      \"userBoundaries\": [\n        {\n          \"boundaryID\": \"<string>\",\n          \"boundaryDescription\": \"<string>\",\n          \"supplementalBoundaryID\": \"<string>\",\n          \"boundaryConfidence\": \"<string>\",\n          \"bufferRelation\": \"<string>\",\n          \"distanceToBorder\": \"<string>\"\n        },\n        {\n          \"boundaryID\": \"<string>\",\n          \"boundaryDescription\": \"<string>\",\n          \"supplementalBoundaryID\": \"<string>\",\n          \"boundaryConfidence\": \"<string>\",\n          \"bufferRelation\": \"<string>\",\n          \"distanceToBorder\": \"<string>\"\n        }\n      ]\n    }\n  }\n}"
+										},
+										{
+											"name": "Invalid request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Unauthorized: Invalid token",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Forbidden",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "Forbidden",
+											"code": 403,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Too many requests",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "Too Many Requests",
+											"code": 429,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Internal server error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Service unavailable",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"admin1\": \"<string>\",\n    \"admin2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"postalCodeExt\": \"<string>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"60\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalDirectional\"\n    },\n    \"matching\": {\n      \"matchMode\": \"RELAXED\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"SPD\",\n      \"salesTaxRateType\": \"CONSTRUCTION\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/address",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"address"
+													]
+												}
+											},
+											"status": "Service Unavailable",
+											"code": 503,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "location",
+							"item": [
+								{
+									"name": "Determines tax jurisdiction and tax codes of given coordinates",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Request-Id",
+												"value": "<string>",
+												"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/geo-tax/location",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"geo-tax",
+												"location"
+											]
+										},
+										"description": "# Overview\nThis endpoint takes a latitude and longitude as input and determines which tax jurisdiction a given address is located in, and which current tax codes apply.\n"
+									},
+									"response": [
+										{
+											"name": "Tax Details Retrieved Successfully ",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"response\": {\n    \"status\": \"SERVICE_UNAVAILABLE\",\n    \"errorMessage\": \"<string>\",\n    \"result\": {\n      \"objectId\": \"<string>\",\n      \"gnisCode\": \"<string>\",\n      \"preciselyId\": \"<string>\",\n      \"confidence\": \"<double>\",\n      \"jurisdiction\": {\n        \"state\": {\n          \"code\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        \"county\": {\n          \"code\": \"<string>\",\n          \"name\": \"<string>\"\n        },\n        \"place\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\",\n          \"gnisCode\": \"<string>\",\n          \"selfCollected\": \"<boolean>\",\n          \"classCode\": \"<string>\",\n          \"incorporatedFlag\": \"<string>\",\n          \"lastAnnexedDate\": \"<string>\",\n          \"lastUpdatedDate\": \"<string>\",\n          \"lastVerifiedDate\": \"<string>\",\n          \"pointStatus\": \"<string>\",\n          \"distanceToBorder\": \"<string>\",\n          \"confidence\": \"<string>\"\n        },\n        \"geoTaxKey\": \"<string>\",\n        \"geoTaxKeyMatchCode\": \"<string>\",\n        \"spds\": [\n          {\n            \"districtName\": \"<string>\",\n            \"districtCode\": \"<string>\",\n            \"districtNumber\": \"<string>\",\n            \"versionDate\": \"<string>\",\n            \"effectiveDate\": \"<string>\",\n            \"compiledDate\": \"<string>\",\n            \"updateDate\": \"<string>\",\n            \"boundaryBuffer\": {\n              \"bufferRelation\": {\n                \"description\": \"<string>\",\n                \"value\": \"<string>\"\n              },\n              \"distanceToBorder\": {\n                \"unit\": \"<string>\",\n                \"value\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"districtName\": \"<string>\",\n            \"districtCode\": \"<string>\",\n            \"districtNumber\": \"<string>\",\n            \"versionDate\": \"<string>\",\n            \"effectiveDate\": \"<string>\",\n            \"compiledDate\": \"<string>\",\n            \"updateDate\": \"<string>\",\n            \"boundaryBuffer\": {\n              \"bufferRelation\": {\n                \"description\": \"<string>\",\n                \"value\": \"<string>\"\n              },\n              \"distanceToBorder\": {\n                \"unit\": \"<string>\",\n                \"value\": \"<string>\"\n              }\n            }\n          }\n        ]\n      },\n      \"matchedAddress\": {\n        \"formattedAddress\": \"<string>\",\n        \"formattedStreetAddress\": \"<string>\",\n        \"formattedLocationAddress\": \"<string>\",\n        \"addressNumber\": \"<string>\",\n        \"stateName\": \"<string>\",\n        \"countyName\": \"<string>\",\n        \"cityName\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"postalCodeExt\": \"<string>\",\n        \"placeName\": \"<string>\",\n        \"unit\": \"<string>\",\n        \"unitType\": \"<string>\",\n        \"street\": \"<string>\",\n        \"firmName\": \"<string>\",\n        \"dataTypeName\": \"<string>\",\n        \"genRC\": \"<string>\",\n        \"locationCode\": \"<string>\",\n        \"matchCode\": \"<string>\",\n        \"numCandidates\": \"<string>\",\n        \"urbanization\": \"<string>\",\n        \"houseNumber\": \"<string>\",\n        \"preDirectional\": \"<string>\",\n        \"streetType\": \"<string>\",\n        \"postDirectional\": \"<string>\"\n      },\n      \"salesTax\": {\n        \"totalTaxRate\": \"<double>\",\n        \"stateTaxRate\": \"<double>\",\n        \"countyTaxRate\": \"<double>\",\n        \"municipalTaxRate\": \"<double>\",\n        \"resultCode\": \"<string>\",\n        \"spdsTax\": [\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          },\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          }\n        ]\n      },\n      \"useTax\": {\n        \"totalTaxRate\": \"<double>\",\n        \"stateTaxRate\": \"<double>\",\n        \"countyTaxRate\": \"<double>\",\n        \"municipalTaxRate\": \"<double>\",\n        \"resultCode\": \"<string>\",\n        \"spdsTax\": [\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          },\n          {\n            \"districtNumber\": \"<string>\",\n            \"taxRate\": \"<double>\"\n          }\n        ]\n      },\n      \"census\": {\n        \"block\": \"<string>\",\n        \"blockGroup\": \"<string>\",\n        \"cbsa\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\",\n          \"metroFlag\": \"<string>\"\n        },\n        \"matchLevel\": \"<string>\",\n        \"matchCode\": \"<string>\",\n        \"tract\": \"<string>\",\n        \"mcd\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\",\n          \"pointStatus\": \"<string>\",\n          \"distanceToBorder\": \"<string>\",\n          \"confidence\": \"<string>\"\n        },\n        \"cbsad\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\"\n        },\n        \"csa\": {\n          \"name\": \"<string>\",\n          \"code\": \"<string>\"\n        }\n      },\n      \"latLongFields\": {\n        \"matchCode\": \"<string>\",\n        \"matchLevel\": \"<string>\",\n        \"geometry\": {\n          \"latLongAltFmt\": \"<string>\",\n          \"latLongAltFmtValue\": \"<string>\",\n          \"type\": \"<string>\",\n          \"coordinates\": [\n            \"<double>\",\n            \"<double>\"\n          ]\n        }\n      },\n      \"numTaxDistrictsFound\": \"<integer>\",\n      \"ipds\": [\n        {\n          \"districtID\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": {\n            \"description\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          \"taxCodeDescription\": \"<string>\",\n          \"notes\": \"<string>\",\n          \"effectiveDate\": \"<string>\",\n          \"expirationDate\": \"<string>\",\n          \"versionDate\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"changeDate\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          },\n          \"rates\": [\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        },\n        {\n          \"districtID\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": {\n            \"description\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          \"taxCodeDescription\": \"<string>\",\n          \"notes\": \"<string>\",\n          \"effectiveDate\": \"<string>\",\n          \"expirationDate\": \"<string>\",\n          \"versionDate\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"changeDate\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          },\n          \"rates\": [\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            {\n              \"name\": \"<string>\",\n              \"format\": \"<string>\",\n              \"formatDescription\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          ]\n        }\n      ],\n      \"ptds\": [\n        {\n          \"id\": \"<string>\",\n          \"districtId\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"municipalEMSTax\": \"<string>\",\n          \"municipalIncomeTax\": \"<string>\",\n          \"schoolDistrictEMSTax\": \"<string>\",\n          \"schoolDistrictIncomeTax\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          }\n        },\n        {\n          \"id\": \"<string>\",\n          \"districtId\": \"<string>\",\n          \"districtName\": \"<string>\",\n          \"districtType\": \"<string>\",\n          \"updateDate\": \"<string>\",\n          \"municipalEMSTax\": \"<string>\",\n          \"municipalIncomeTax\": \"<string>\",\n          \"schoolDistrictEMSTax\": \"<string>\",\n          \"schoolDistrictIncomeTax\": \"<string>\",\n          \"boundaryBuffer\": {\n            \"bufferRelation\": {\n              \"description\": \"<string>\",\n              \"value\": \"<string>\"\n            },\n            \"distanceToBorder\": {\n              \"unit\": \"<string>\",\n              \"value\": \"<string>\"\n            }\n          }\n        }\n      ],\n      \"ptc\": {\n        \"matchCode\": \"<string>\",\n        \"ptcs\": [\n          {\n            \"payrollCode\": \"<string>\",\n            \"payrollDescription\": \"<string>\",\n            \"payrollFlag\": \"<string>\"\n          },\n          {\n            \"payrollCode\": \"<string>\",\n            \"payrollDescription\": \"<string>\",\n            \"payrollFlag\": \"<string>\"\n          }\n        ]\n      },\n      \"userBoundaries\": [\n        {\n          \"boundaryID\": \"<string>\",\n          \"boundaryDescription\": \"<string>\",\n          \"supplementalBoundaryID\": \"<string>\",\n          \"boundaryConfidence\": \"<string>\",\n          \"bufferRelation\": \"<string>\",\n          \"distanceToBorder\": \"<string>\"\n        },\n        {\n          \"boundaryID\": \"<string>\",\n          \"boundaryDescription\": \"<string>\",\n          \"supplementalBoundaryID\": \"<string>\",\n          \"boundaryConfidence\": \"<string>\",\n          \"bufferRelation\": \"<string>\",\n          \"distanceToBorder\": \"<string>\"\n        }\n      ]\n    }\n  }\n}"
+										},
+										{
+											"name": "Invalid request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Unauthorized: Invalid token",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "Unauthorized",
+											"code": 401,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Forbidden",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "Forbidden",
+											"code": 403,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Too many requests",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "Too Many Requests",
+											"code": 429,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Internal server error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										},
+										{
+											"name": "Service unavailable",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "X-Request-Id",
+														"value": "<string>",
+														"description": "The X-Request-Id header is optional but incredibly useful for developers. It serves as a unique identifier for requests within our system. When you encounter any problems with your requests, providing us with the X-Request-Id will enable us to pinpoint the specific request in question without the need for extensive manual searching. This means faster and more efficient troubleshooting. The maximum allowed length is 38 characters."
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"location\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"preferences\": {\n    \"geocoding\": {\n      \"defaultBufferWidth\": 0,\n      \"latLongOffset\": \"20\",\n      \"squeeze\": \"YES\",\n      \"latLongAltFormat\": \"DecimalSign\"\n    },\n    \"matching\": {\n      \"matchMode\": \"EXACT\"\n    },\n    \"output\": {\n      \"taxDistrict\": \"IPD\",\n      \"salesTaxRateType\": \"NONE\",\n      \"outputCasing\": \"UPPER\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/geo-tax/location",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"geo-tax",
+														"location"
+													]
+												}
+											},
+											"status": "Service Unavailable",
+											"code": 503,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"errors\": [\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    },\n    {\n      \"detail\": \"<string>\",\n      \"code\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\"\n}"
+										}
+									]
+								}
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "{{EXTERNAL-IP}}/v1/geo-tax/address",
-					"host": [
-						"{{EXTERNAL-IP}}"
-					],
-					"path": [
-						"v1",
-						"geo-tax",
-						"address"
 					]
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -44,6 +938,7 @@
 			"listen": "prerequest",
 			"script": {
 				"type": "text/javascript",
+				"packages": {},
 				"exec": [
 					""
 				]
@@ -53,6 +948,7 @@
 			"listen": "test",
 			"script": {
 				"type": "text/javascript",
+				"packages": {},
 				"exec": [
 					""
 				]
@@ -61,9 +957,8 @@
 	],
 	"variable": [
 		{
-			"key": "EXTERNAL-IP",
-			"value": "http://[geotax-host-url]",
-			"type": "string"
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
 		}
 	]
 }

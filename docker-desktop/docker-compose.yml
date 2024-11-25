@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   precisely-geotax-svc:
-    image: ${_GEOTAX_IMAGE:-geotax-service:2.0.0}
+    image: ${_GEOTAX_IMAGE:-geotax-service:3.0.0}
     platform: linux/amd64
     deploy:
       resources:
@@ -12,6 +12,7 @@ services:
       - ${_DATA_PATH:-/data/extracted}:/mnt/data/extracted
     environment:
       - DATA_PATH=/mnt/data/extracted
+      - AUTH_ENABLED=false
     networks:
       - precisely-geotax
     restart: always

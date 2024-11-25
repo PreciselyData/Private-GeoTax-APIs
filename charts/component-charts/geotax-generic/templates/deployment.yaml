@@ -78,21 +78,15 @@ spec:
                   name: {{ include "geotax-data-config.name" . }}
                   key: geotax.vintage
             - name: SDK_BLOCKING_THREADS
-              value: "16"
+              value: "24"
             - name: SDK_BLOCKING_QUEUE_CAPACITY
               value: "100000"
             - name: SDK_POOL_MAX_TOTAL
-              value: "20"
+              value: "8"
             - name: SDK_POOL_MAX_TOTAL_PER_KEY
-              value: "8"
+              value: "2"
             - name: SDK_POOL_MAX_IDLE_PER_KEY
-              value: "8"
-            - name: SDK_POOL_EVICTION_RUNS_INTERVAL
-              value: "30"
-            - name: SDK_POOL_MIN_EVICTABLE_IDLE_TIME
-              value: "30"
-            - name: SDK_POOL_ABANDONED_TIMEOUT
-              value: "60"
+              value: "2"
             - name: AUTH_ENABLED
               value: "false"
             - name: KAFKA_ENABLED
