@@ -20,7 +20,7 @@ You can create the EKS cluster or use existing EKS cluster.
   sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command from
   parent directory to create the cluster using the script:
     ```shell
-    eksctl create cluster -f ./cluster-sample/create-eks-cluster.yaml
+    eksctl create cluster -f ./cluster-sample/eks/create-eks-cluster.yaml
     ```
 
 - If you already have an EKS cluster, make sure you have following addons or plugins related to it, installed on the
@@ -36,14 +36,14 @@ You can create the EKS cluster or use existing EKS cluster.
     ```shell
     aws eks --region [aws-region] update-kubeconfig --name [cluster-name]
     
-    eksctl create addon -f ./cluster-sample/create-eks-cluster.yaml
+    eksctl create addon -f ./cluster-sample/eks/create-eks-cluster.yaml
     ```
 - Once you create EKS cluster, you can
   apply [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) so that the
   cluster can be scaled vertically as per requirements. We have provided a sample [cluster autoscaler script](../../../cluster-sample/eks/cluster-auto-scaler.yaml). 
 - Please run the following command to create cluster autoscaler:
     ```shell
-    kubectl apply -f ./cluster-sample/cluster-auto-scaler.yaml
+    kubectl apply -f ./cluster-sample/eks/cluster-auto-scaler.yaml
     ```
 - To enable [HorizontalPodAutoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/), the
   cluster also needs a [Metrics API Server](https://github.com/kubernetes-sigs/metrics-server) for capturing cluster
@@ -54,7 +54,7 @@ You can create the EKS cluster or use existing EKS cluster.
 - The GeoTax service requires ingress controller setup. Run the following command for setting up NGINX ingress controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/ingress-values.yaml
+  helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/eks/ingress-values.yaml
   ```
   *Note: You can update the nodeSelector according to your cluster's ingress node.*
 
@@ -79,7 +79,7 @@ and push it to your Elastic Container Repositories.
 (Note: This script requires python, docker and awscli to be installed in your system)
 
 ```shell
-cd ./scripts/images-to-ecr-uploader
+cd ./scripts/eks/images-to-ecr-uploader
 pip install -r requirements.txt
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
@@ -100,14 +100,14 @@ We have provided python script to create EFS and link it to EKS cluster, or dire
 
 - If you DON'T have existing EFS, run the following commands:
   ```shell
-  cd ./scripts/efs-creator
+  cd ./scripts/eks/efs-creator
   pip install -r requirements.txt
   python ./create_efs.py --cluster-name [eks-cluster-name] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region] --efs-name [precisely-geotax-efs] --security-group-name [precisely-geotax-sg]
   ```
 
 - If you already have EFS, but you want to create mount targets so that EFS can be accessed from the EKS cluster, run the following command:
   ```shell
-  cd ../scripts/efs-creator
+  cd ../scripts/eks/efs-creator
   pip install -r requirements.txt
   python ./create_efs.py --cluster-name [eks-cluster-name] --existing true --aws-access-key [aws-access-key] --aws-secret [aws-secret-key] --aws-region [aws-region] --file-system-id [file-system-id]
   ```
@@ -119,11 +119,11 @@ The GeoTax Application relies on reference data for performing GeoTax operations
 
 You can make use of a [miscellaneous helm chart for installing reference data](../../../charts/eks/reference-data-setup/README.md), please follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
 ```shell
-helm install geotax-reference-data ./charts/reference-data-setup/ \
+helm install geotax-reference-data ./charts/eks/reference-data-setup/ \
 --set "global.pdxApiKey=[your-pdx-key]" \
 --set "global.pdxSecret=[your-pdx-secret]" \
---set "global.efs.fileSystemId=[fileSystemId]" \
---set "dataDownload.image.repository=[reference-data-image-repository]" \
+--set "global.nfs.fileSystemId=[fileSystemId]" \
+--set "geotax.dataDownload.image.repository=[reference-data-image-repository]" \
 --set "global.dataConfigMap=[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]" \
 --dependency-update --timeout 60m
 ```
@@ -133,10 +133,10 @@ helm install geotax-reference-data ./charts/reference-data-setup/ \
 To install/upgrade the GeoTax helm chart, use the following command:
 
 ```shell
-helm upgrade --install geotax-application ./charts/geotax-application \
+helm upgrade --install geotax-application ./charts/eks/geotax-application \
 --dependency-update \
 --set "global.awsRegion=[aws-region]" \
---set "global.efs.fileSystemId=[fs-0ccdae49cc2c20df8]" \
+--set "global.nfs.fileSystemId=[fs-0ccdae49cc2c20df8]" \
 --set "ingress.hosts[0].host=[ingress-host]" \
 --set "ingress.hosts[0].paths[0].path=[/precisely/geotax]" \
 --set "ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
@@ -149,7 +149,7 @@ helm upgrade --install geotax-application ./charts/geotax-application \
 #### Mandatory Parameters
 
 * ``global.awsRegion``: AWS Region
-* ``global.efs.fileSystemId``: The ID of the EFS
+* ``global.nfs.fileSystemId``: The ID of the EFS
 * ``ingress.hosts[0].host``: The Host name of Ingress e.g. http://aab329b2d767544.us-east-1.elb.amazonaws.com
 * ``ingress.hosts[0].paths[0].path``: The PATH at which the solution to be hosted. (e.g. ``/precisely/geotax``)
 * ``ingress.hosts[0].paths[0].pathType``: The pathType of the Ingress Path
