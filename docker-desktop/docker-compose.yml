@@ -8,6 +8,8 @@ services:
         reservations:
           cpus: '1'
           memory: 1G
+    ports:
+      - "${_SERVICE_PORT:-8080}:8080"
     volumes:
       - ${_DATA_PATH:-/data/extracted}:/mnt/data/extracted
     environment:
