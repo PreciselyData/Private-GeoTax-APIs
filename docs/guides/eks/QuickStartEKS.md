@@ -137,12 +137,12 @@ helm upgrade --install geotax-application ./charts/eks/geotax-application \
 --dependency-update \
 --set "global.awsRegion=[aws-region]" \
 --set "global.nfs.fileSystemId=[fs-0ccdae49cc2c20df8]" \
---set "ingress.hosts[0].host=[ingress-host]" \
---set "ingress.hosts[0].paths[0].path=[/precisely/geotax]" \
---set "ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
+--set "geotax.ingress.hosts[0].host=[ingress-host]" \
+--set "geotax.ingress.hosts[0].paths[0].path=[/precisely/geotax]" \
+--set "geotax.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
 --set "global.nodeSelector.node-app=geotax" \
---set "image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/geotax-service" \
---set "image.tag=3.0.0" \
+--set "geotax.image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/geotax-service" \
+--set "geotax.image.tag=3.0.0" \
 --namespace geotax-application --create-namespace
 ```
 
@@ -150,10 +150,10 @@ helm upgrade --install geotax-application ./charts/eks/geotax-application \
 
 * ``global.awsRegion``: AWS Region
 * ``global.nfs.fileSystemId``: The ID of the EFS
-* ``ingress.hosts[0].host``: The Host name of Ingress e.g. http://aab329b2d767544.us-east-1.elb.amazonaws.com
-* ``ingress.hosts[0].paths[0].path``: The PATH at which the solution to be hosted. (e.g. ``/precisely/geotax``)
-* ``ingress.hosts[0].paths[0].pathType``: The pathType of the Ingress Path
-* ``image.repository``: The ECR image repository for the geotax image
+* ``geotax.ingress.hosts[0].host``: The Host name of Ingress e.g. http://aab329b2d767544.us-east-1.elb.amazonaws.com
+* ``geotax.ingress.hosts[0].paths[0].path``: The PATH at which the solution to be hosted. (e.g. ``/precisely/geotax``)
+* ``geotax.ingress.hosts[0].paths[0].pathType``: The pathType of the Ingress Path
+* ``geotax.image.repository``: The ECR image repository for the geotax image
 * ``global.nodeSelector``: The node selector to run the GeoTax solutions on nodes of the cluster
 
 For more information on helm values, follow [this link](../../../charts/eks/geotax-application/README.md#helm-values).
