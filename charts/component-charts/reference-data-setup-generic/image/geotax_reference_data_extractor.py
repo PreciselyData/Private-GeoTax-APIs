@@ -248,7 +248,7 @@ if not args.dest_path:
     extract_path = "/mnt/data/geotax-data"
 spd_path = os.path.join(LOCAL_PATH, "spds")
 
-print(f"Provided products for Installation: {COUNTRY_SPD_MAPPING}")
+print(f"Provided products for Installation: {COUNTRY_MAPPING}")
 os.makedirs(extract_path, exist_ok=True)
 for product in COUNTRY_MAPPING:
     os.makedirs(spd_path, exist_ok=True)
