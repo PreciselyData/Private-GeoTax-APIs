@@ -96,13 +96,11 @@ spec:
       {{- if .Values.global.syncDataConfig.enabled }}
       initContainers:
         - name: {{ printf "%s-%s" .Chart.Name "reference-data" }}
-          image: mcr.microsoft.com/azure-cli:latest
+          image: peterdavehello/azcopy:latest
           command:
             - sh
             - -c
-            - mkdir -p ${AZURE_STORAGE_DATA_PATH}
-            - time azcopy sync "https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${AZURE_STORAGE_CONTAINER_NAME}?${AZURE_SAS_TOKEN}" ${AZURE_STORAGE_DATA_PATH} --recursive
-            - echo Reference Data Download Completed Successfully.
+            - mkdir -p ${AZURE_STORAGE_DATA_PATH} && time azcopy sync "https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${AZURE_STORAGE_CONTAINER_NAME}?${AZURE_SAS_TOKEN}" ${AZURE_STORAGE_DATA_PATH} --recursive && echo Reference Data Download Completed Successfully.
           volumeMounts:
             {{- include "geotax-svc.volumeMounts" . | nindent 12 }}
           env:
