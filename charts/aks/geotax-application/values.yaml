@@ -5,10 +5,14 @@ global:
   ## Configurations related to Network File System
   nfs:
     ##
-    ## The Azure Storage Name
+    ## The Azure Storage Name (For using Azure FileShare)
     shareName: geotaxshare
     ##
     ## The Azure Storage Account ID
     storageAccount: geotax
+    ##
+    ## The Azure Blob Storage Container Name where reference data is present
     containerName: reference-data
+    ##
+    ## The Azure SAS Token for syncing the reference data from Azure Blob Storage container.
     sasToken:

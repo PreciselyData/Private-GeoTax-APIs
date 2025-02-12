@@ -23,24 +23,15 @@ some others listed below.
 
 - `Contributor` role to create AKS cluster
 - `Azure Blob Storage Reader`  role to download .spd files from Azure Blob Storage
-- [NVMe enabled nodes.](https://learn.microsoft.com/en-us/azure/virtual-machines/enable-nvme-faqs)
-##### Authenticate to Azure using Azure Cli
-
-Azure CLI supports multiple authentication methods; use any authentication method to sign in. For details about
-Microsoft
-authentication types see their [documentation](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli).
-
-  ```shell 
-  az login 
-  ```
+- `NVMe Virtual Machines`. Refer for more information: https://learn.microsoft.com/en-us/azure/virtual-machines/enable-nvme-faqs
 
 ## Step 2: Create the AKS Cluster
 
 You can create the AKS cluster or use existing AKS cluster.
 
-> NOTE: We recommend using NVMe nodes which are highly optimized for IOPS and throughput. You can visit https://learn.microsoft.com/en-us/azure/storage/container-storage/use-container-storage-with-local-disk for more information.
+> NOTE: We recommend using NVMe Virtual Machines which are highly optimized for IOPS and throughput. You can visit https://learn.microsoft.com/en-us/azure/storage/container-storage/use-container-storage-with-local-disk for more information.
 - We have provided you with few sample cluster installation commands. Run the following sample commands to create the cluster:
-  > NOTE: You need to create an Azure Container Registry first before starting a cluster.
+  
   Commands to create and maintain azure container registry are
   mentioned [here](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal?tabs=azure-cli).
     ```shell
@@ -48,7 +39,7 @@ You can create the AKS cluster or use existing AKS cluster.
     az aks nodepool add --name ingress --cluster-name geotax --node-count 1 --node-osdisk-size 100 --labels node-app=geotax-ingress --zones 1 2 3
     az aks get-credentials --name geotax --overwrite-existing
     ```
-
+  > Update the commands accordingly, make sure to use NVMe enabled Virtual machines like `Standard_L8s_v3` as mentioned in the sample commands above.
 - The geotax service requires ingress controller setup. Run the following command for setting up NGINX ingress
   controller:
   ```shell
@@ -57,7 +48,7 @@ You can create the AKS cluster or use existing AKS cluster.
   helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/aks/ingress-values.yaml
   ```
 
-*Note: You can update the nodeSelector according to your cluster's ingress node.*
+*Note: Update the nodeSelector according to your cluster's ingress node.*
 
 Once ingress controller setup is completed, you can verify the status and get the ingress URL by using the following
 command:
@@ -88,7 +79,7 @@ docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geota
 docker push <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
 ```
 
-## Step 4: Install Geotax Reference Data to Azure Blob Storage Container
+## Step 4: Download Geotax Reference Data from PDX and Upload it to Azure Blob Storage Container
 
 You can run the following commands on any machine to download and upload reference data to the Azure Blob Storage Container:
 
@@ -104,9 +95,9 @@ You can run the following commands on any machine to download and upload referen
     ```shell
     python geotax_reference_data_extractor.py --pdx-api-key '<YOUR-PDX-API-KEY>' --pdx-api-secret '<YOUR-PDX-SECRET>' --local-path '<YOUR LOCAL PATH e.g. /home/ec2-user/geotax>' --dest-path '<YOUR LOCAL PATH FOR EXTRACTION e.g. /home/ec2-user/geotax/extracted>' --data-mapping '["Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data","Payroll Tax Data#United States#All USA#Spectrum Platform Data","Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data","Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data","Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data","GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data","GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data","Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data","Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data","Special Purpose District Data#United States#All USA#Spectrum Platform Data"]'
     ```
-  Provide the required details for downloading the given SPDs and extracting in the provided location.
+  Replace the placeholders in the above script for downloading the given SPDs and extracting in the provided location.
 
-- Create the required Azure resources and Upload the Geotax reference data to Azure Blob Storage:
+- To upload the reference data to Azure Blob Storage Container, follow the steps:
     ```shell
     az group create --name cloudnative-geotax-helm --location eastus
     az storage account create --name geotax --resource-group cloudnative-geotax-helm --location eastus --sku Standard_LRS --kind StorageV2
@@ -140,14 +131,8 @@ helm upgrade --install geotax-application ./charts/aks/geotax-application \
 --namespace geotax-application --create-namespace
 ```
 
-> NOTE: By default, the geotax helm chart runs a hook job, which identifies the latest reference-data vintage
-> mount path.
->
-> To override this behaviour, you can disable the geotax-hook by `geotax.geotax-hook.enabled` and provide manual
-> reference data configuration using `global.manualDataConfig`.
->
 > Refer [helm values](../../../charts/component-charts/geotax-generic/README.md#helm-values) for the parameters related
-> to `global.manualDataConfig.*` and `geotax.geotax-hook.*`.
+> to `global.manualDataConfig.*` and `geotax.nfs.*`.
 >
 > Also, for more information, refer to the comments in [values.yaml](../../../charts/component-charts/geotax-generic/values.yaml)
 
