@@ -1,3 +1,4 @@
+{{- if not .Values.geotax.global.syncDataConfig.enabled }}
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -37,3 +38,4 @@ spec:
       storage: 100Gi
   volumeName: {{ include "geotax-pv.name" . }}
   storageClassName: ""
+{{- end }}

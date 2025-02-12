@@ -156,3 +156,18 @@ Common PVC labels
 app.kubernetes.io/name: {{ include "geotax-hook-pvc.name" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Secret Name
+*/}}
+{{- define "geotax-azure-secret.name" -}}
+{{- printf "%s-%s" .Release.Name "secret" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common PV labels
+*/}}
+{{- define "geotax-azure-secret.labels" -}}
+app.kubernetes.io/name: {{ include "geotax-azure-secret.name" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}

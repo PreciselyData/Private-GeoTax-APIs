@@ -8,7 +8,7 @@ metadata:
     {{- include "geotax.labels" . | nindent 4 }}
   {{- if .Values.global.manualDataConfig.enabled }}
   annotations:
-    preicsely.com/config-checksum: {{ .Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
+    precisely.com/config-checksum: {{ .Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
   {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -93,6 +93,31 @@ spec:
               value: "false"
             - name: IS_HELM_SOLUTION
               value: "true"
+      {{- if .Values.global.syncDataConfig.enabled }}
+      initContainers:
+        - name: {{ printf "%s-%s" .Chart.Name "reference-data" }}
+          image: mcr.microsoft.com/azure-cli:latest
+          command:
+            - sh
+            - -c
+            - mkdir -p ${AZURE_STORAGE_DATA_PATH}
+            - time azcopy sync "https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${AZURE_STORAGE_CONTAINER_NAME}?${AZURE_SAS_TOKEN}" ${AZURE_STORAGE_DATA_PATH} --recursive
+            - echo Reference Data Download Completed Successfully.
+          volumeMounts:
+            {{- include "geotax-svc.volumeMounts" . | nindent 12 }}
+          env:
+            - name: AZURE_STORAGE_CONTAINER_NAME
+              value: {{ .Values.global.nfs.containerName }}
+            - name: AZURE_STORAGE_DATA_PATH
+              value: {{ index .Values.global.manualDataConfig.configMapData "geotax.vintage" }}
+            - name: AZURE_STORAGE_ACCOUNT_NAME
+              value: {{ .Values.global.nfs.storageAccount }}
+            - name: AZURE_SAS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: "azure_sas_token"
+                  name: {{ include "geotax-azure-secret.name" . }}
+      {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -106,6 +131,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        {{- if not .Values.global.syncDataConfig.enabled }}
         - name: geotax-host-volume
           persistentVolumeClaim:
             claimName: {{ include "geotax-pvc.name" . }}
+        {{- end }}
+        {{- if .Values.global.syncDataConfig.enabled }}
+        - name: geotax-host-volume
+          hostPath:
+            path: {{ .Values.global.nfs.volumeMountPath }}
+            type: DirectoryOrCreate
+        {{- end }}

@@ -10,3 +10,5 @@ global:
     ##
     ## The Azure Storage Account ID
     storageAccount: geotax
+    containerName: reference-data
+    sasToken:

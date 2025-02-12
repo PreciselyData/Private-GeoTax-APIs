@@ -78,7 +78,7 @@ You can create the AKS cluster or use existing AKS cluster.
   controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  help repo update
+  helm repo update
   helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/aks/ingress-values.yaml
   ```
 

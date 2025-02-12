@@ -143,13 +143,16 @@ global:
   ## This configuration will be useful if you want to mount a specific data folder for geotax.
   ## Please update the configMapData parameters as required.
   manualDataConfig:
-    enabled: false
+    enabled: true
     nameOverride: geotax-data-mnl-config
     configMapData:
-      geotax.vintage: /mnt/data/geotax-data/202312181321
+      geotax.vintage: "/mnt/data/geotax-data/202312181321"
+
+  syncDataConfig:
+    enabled: true
 
 ## geotax-hook is used to identify the latest vintage of reference data to mount to the geotax containers.
 ## In case, if you want to provide a specific reference data vintage, use the `global.manualDataConfig` parameters and disable geotax-hook.
 geotax-hook:
   ## Config for enabling or disabling `data-vintage` job hook.
-  enabled: true
+  enabled: false
