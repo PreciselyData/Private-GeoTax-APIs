@@ -25,7 +25,61 @@ some others listed below.
 - `Azure Blob Storage Reader`  role to download .spd files from Azure Blob Storage
 - `NVMe Virtual Machines`. Refer for more information: https://learn.microsoft.com/en-us/azure/virtual-machines/enable-nvme-faqs
 
-## Step 2: Create the AKS Cluster
+## Step 2: Download GeoTax Docker Images
+
+The geotax helm chart relies on the availability of Docker images for the microservices, which are conveniently
+obtainable from Precisely Data Experience. The required docker images include `GeoTax Service Docker Image` tar file.
+
+> [!NOTE] =>
+> Contact Precisely or visit [Precisely Data Experience](https://data.precisely.com/) for buying subscription to docker
+> image `GEOTAX DOCKER IMAGE`
+
+Once you have purchased a subscription to Precisely Data Experience (PDX), you can directly download Docker images.
+Afterward, you can easily load these Docker images into your Docker environment.
+
+Refer to the documentation for [Creating Azure Resource Group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal#create-resource-groups) and [Creating Azure Container Registry](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal?tabs=azure-cli).
+
+You can run the following commands after extracting the zipped docker image:
+
+```shell
+cd ./geotax-images
+az acr login --name <registry-name> --subscription <subscription-id>
+docker load -i ./geotax-service.tar
+docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
+docker push <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
+```
+
+## Step 3: Download Geotax Reference Data from PDX and Upload it to Azure Blob Storage Container
+
+You can run the following commands on any machine to download and upload reference data to the Azure Blob Storage Container:
+
+- Create an Azure Account Storage:
+    ```shell
+    az storage account create --name geotax --location eastus --sku Premium_LRS --kind FileStorage --https-only false
+    ```
+- Download python script for Downloading and Uploading Geotax Reference Data:
+    ```shell
+    curl -o geotax_reference_data_extractor.py "https://raw.githubusercontent.com/PreciselyData/Private-GeoTax-APIs/refs/heads/rc_3.0.0-azure-nvme/charts/component-charts/reference-data-setup-generic/image/geotax_reference_data_extractor.py"
+    ```
+- Use the script to download the Geotax reference data locally:
+    ```shell
+    python geotax_reference_data_extractor.py --pdx-api-key '<YOUR-PDX-API-KEY>' --pdx-api-secret '<YOUR-PDX-SECRET>' --local-path '<YOUR LOCAL PATH e.g. /home/ec2-user/geotax>' --dest-path '<YOUR LOCAL PATH FOR EXTRACTION e.g. /home/ec2-user/geotax/extracted>' --data-mapping '["Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data","Payroll Tax Data#United States#All USA#Spectrum Platform Data","Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data","Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data","Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data","GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data","GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data","Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data","Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data","Special Purpose District Data#United States#All USA#Spectrum Platform Data"]'
+    ```
+  Replace the placeholders in the above script for downloading the given SPDs and extracting in the provided location.
+  > NOTE: You can provide the data mapping as per your requirement for the reference data that you want to upload. You can also ignore this parameter and change it in the script itself if you face any issues running the command. 
+
+- To upload the reference data to Azure Blob Storage Container, follow the steps:
+    ```shell
+    az storage account create --name <e.g. geotax> --resource-group <e.g.: cloudnative-geotax-helm> --location <e.g. eastus> --sku Standard_LRS --kind StorageV2
+    az storage container create --name <e.g. reference-data> --account-name <e.g. geotax> --auth-mode login
+    ```
+  Command to upload the geotax reference data:
+    ```shell
+     az storage blob upload-batch --source </home/ec2-user/geotax/extracted/> --destination <reference-data> --account-name <geotax> --sas-token '<YOUR-SAS-TOKEN>'
+    ```
+  Replace the placeholders in the above commands, for more information regarding upload-batch, refer to https://learn.microsoft.com/en-us/cli/azure/storage/blob?view=azure-cli-latest#az-storage-blob-upload-batch.
+
+## Step 4: Create the AKS Cluster
 
 You can create the AKS cluster or use existing AKS cluster.
 
@@ -35,9 +89,9 @@ You can create the AKS cluster or use existing AKS cluster.
   Commands to create and maintain azure container registry are
   mentioned [here](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal?tabs=azure-cli).
     ```shell
-    az aks create --name geotax --generate-ssh-keys --attach-acr <your-acr-name> --enable-cluster-autoscaler --node-count 1 --min-count 1 --max-count 10 --node-osdisk-type Managed --node-osdisk-size 100 --node-vm-size Standard_L8s_v3 --location eastus --nodepool-labels node-app=geotax --zones 1 2 3
-    az aks nodepool add --name ingress --cluster-name geotax --node-count 1 --node-osdisk-size 100 --labels node-app=geotax-ingress --zones 1 2 3
-    az aks get-credentials --name geotax --overwrite-existing
+    az aks create --name <e.g. geotax> --generate-ssh-keys --attach-acr <your-acr-name> --enable-cluster-autoscaler --node-count 1 --min-count 1 --max-count 10 --node-osdisk-type Managed --node-osdisk-size 100 --node-vm-size Standard_L8s_v3 --location eastus --nodepool-labels node-app=geotax --zones 1 2 3
+    az aks nodepool add --name ingress --cluster-name <e.g. geotax> --node-count 1 --node-osdisk-size 100 --labels node-app=geotax-ingress --zones 1 2 3
+    az aks get-credentials --name <e.g. geotax> --overwrite-existing
     ```
   > Update the commands accordingly, make sure to use NVMe enabled Virtual machines like `Standard_L8s_v3` as mentioned in the sample commands above.
 - The geotax service requires ingress controller setup. Run the following command for setting up NGINX ingress
@@ -57,62 +111,10 @@ command:
   kubectl get services -o wide    
   ```
 
-## Step 3: Download GeoTax Docker Images
-
-The geotax helm chart relies on the availability of Docker images for the microservices, which are conveniently
-obtainable from Precisely Data Experience. The required docker images include `GeoTax Service Docker Image` tar file.
-
-> [!NOTE] =>
-> Contact Precisely or visit [Precisely Data Experience](https://data.precisely.com/) for buying subscription to docker
-> image `GEOTAX DOCKER IMAGE`
-
-Once you have purchased a subscription to Precisely Data Experience (PDX), you can directly download Docker images.
-Afterward, you can easily load these Docker images into your Docker environment.
-
-You can run the following commands after extracting the zipped docker image:
-
-```shell
-cd ./geotax-images
-az acr login --name <registry-name> --subscription <subscription-id>
-docker load -i ./geotax-service.tar
-docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
-docker push <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
-```
-
-## Step 4: Download Geotax Reference Data from PDX and Upload it to Azure Blob Storage Container
-
-You can run the following commands on any machine to download and upload reference data to the Azure Blob Storage Container:
-
-- Create an Azure Account Storage:
-    ```shell
-    az storage account create --name geotax --location eastus --sku Premium_LRS --kind FileStorage --https-only false
-    ```
-- Download python script for Downloading and Uploading Geotax Reference Data:
-    ```shell
-    curl -o geotax_reference_data_extractor.py "https://raw.githubusercontent.com/PreciselyData/Private-GeoTax-APIs/refs/heads/rc_3.0.0-azure-nvme/charts/component-charts/reference-data-setup-generic/image/geotax_reference_data_extractor.py"
-    ```
-- Use the script to download the Geotax reference data locally:
-    ```shell
-    python geotax_reference_data_extractor.py --pdx-api-key '<YOUR-PDX-API-KEY>' --pdx-api-secret '<YOUR-PDX-SECRET>' --local-path '<YOUR LOCAL PATH e.g. /home/ec2-user/geotax>' --dest-path '<YOUR LOCAL PATH FOR EXTRACTION e.g. /home/ec2-user/geotax/extracted>' --data-mapping '["Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data","Payroll Tax Data#United States#All USA#Spectrum Platform Data","Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data","Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data","Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data","GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data","GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data","Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data","Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data","Special Purpose District Data#United States#All USA#Spectrum Platform Data"]'
-    ```
-  Replace the placeholders in the above script for downloading the given SPDs and extracting in the provided location.
-
-- To upload the reference data to Azure Blob Storage Container, follow the steps:
-    ```shell
-    az group create --name cloudnative-geotax-helm --location eastus
-    az storage account create --name geotax --resource-group cloudnative-geotax-helm --location eastus --sku Standard_LRS --kind StorageV2
-    az storage container create --name reference-data --account-name geotax --auth-mode login
-    ```
-    Command to upload the geotax reference data:
-    ```shell
-     az storage blob upload-batch --source </home/ec2-user/geotax/extracted/> --destination <reference-data> --account-name <geotax> --sas-token '<YOUR-SAS-TOKEN>'
-    ```
-  Replace the placeholders, for more information regarding upload-batch, refer to https://learn.microsoft.com/en-us/cli/azure/storage/blob?view=azure-cli-latest#az-storage-blob-upload-batch.
-
-## Step 6: Installation of GeoTax Helm Chart
+## Step 5: Installation of GeoTax Helm Chart
 
 > NOTE: For every helm chart version update, make sure you run
-> the [Step 3](#step-3-download-geotax-docker-images) for uploading the docker images with the newest tag.
+> the [Step 3](#step-2-download-geotax-docker-images) for uploading the docker images with the newest tag.
 
 To install/upgrade the geotax helm chart, use the following command:
 
