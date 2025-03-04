@@ -12,7 +12,8 @@ To run the docker images locally, reference data and docker images should be dow
 
 ## Step 2: Running Service Locally
 
-**Note:** Local application setup is only supported on machines with an amd64 chipset and Docker Desktop installed.
+**Note:** ***Local application setup is only supported on machines with an amd64 chipset and Docker Desktop installed.***
+
 
 Modify the below variables in ****.env**** file and run the mentioned command.
 
