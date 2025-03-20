@@ -2,3 +2,15 @@ global:
   awsRegion: "us-east-1"
   nfs:
     fileSystemId: fileSystemId
+  pdxApiKey: "<your-PDX-API-key>"
+  pdxSecret: "<your-PDX-API-secret>"
+  #
+  # Overwrite this value if you want to install only a specific data.
+  # The value should always be provided as escaped JSON
+  dataConfigMap: "[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]"
+
+geotax-reference-data:
+  dataDownload:
+    image:
+      repository: geotax-reference-data-extractor
+      tag: 3.0.1

@@ -8,7 +8,7 @@ metadata:
     {{- include "geotax.labels" . | nindent 4 }}
   {{- if .Values.global.manualDataConfig.enabled }}
   annotations:
-    preicsely.com/config-checksum: {{ .Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
+    precisely.com/config-checksum: {{ .Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
   {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -92,6 +92,8 @@ spec:
             - name: KAFKA_ENABLED
               value: "false"
             - name: IS_HELM_SOLUTION
+              value: "true"
+            - name: METRICS_ENABLED
               value: "true"
       {{- with .Values.global.nodeSelector }}
       nodeSelector:

@@ -78,7 +78,7 @@ You can create the AKS cluster or use existing AKS cluster.
   controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  help repo update
+  helm repo update
   helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/aks/ingress-values.yaml
   ```
 
@@ -109,8 +109,8 @@ You can run the following commands after extracting the zipped docker image:
 cd ./geotax-images
 az acr login --name <registry-name> --subscription <subscription-id>
 docker load -i ./geotax-service.tar
-docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
-docker push <your-container-registry-name>.azurecr.io/geotax-service:3.0.0
+docker tag geotax-service:latest <your-container-registry-name>.azurecr.io/geotax-service:3.0.1
+docker push <your-container-registry-name>.azurecr.io/geotax-service:3.0.1
 ```
 
 ## Step 4: Create and Configure Azure Files Share
@@ -194,31 +194,14 @@ cluster, then you can ignore this step and move to the next step.
 
 ## Step 5: Installation of Reference Data
 
-The GeoTax Application relies on reference data for performing geotax operations. For more information
-related to reference data, please refer to [this link](../../ReferenceData.md).
-
-You can make use of
-a [miscellaneous helm chart](../../../charts/component-charts/reference-data-setup-generic/README.md) for installing reference data, please
-follow the instructions mentioned in the helm chart or run the below command for installing data in NFS or contact
-Precisely Sales Team for the reference data installation.
-
-```shell
-helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
---set "global.pdxApiKey=[your-pdx-key]" \
---set "global.pdxSecret=[your-pdx-secret]" \
---set "reference-data.node-selector.node-app=geotax" \
---set "global.nfs.shareName=[shareName]" \
---set "global.nfs.storageAccount=[storageAccountName]" \
---set "geotax-reference-data.dataDownload.image.repository=[reference-data-image-repository]" \
---dependency-update --timeout 60m
-```
+The GeoTax Application relies on reference data for performing GeoTax operations.
+If you don't have reference data installed in your mounted file storage:
+- Refer to [this guide](../../ReferenceData.md) for more information about reference data, and it's recommended structure.
+- Refer to [this quickstart guide](./QuickStartReferenceDataAKS.md) for installing reference data using Helm Chart.
 
 ## Step 6: Installation of GeoTax Helm Chart
 
-> NOTE: For every helm chart version update, make sure you run
-> the [Step 3](#step-3-download-geotax-docker-images) for uploading the docker images with the newest tag.
-
-To install/upgrade the geotax helm chart, use the following command:
+After installing the reference data, to install/upgrade the geotax helm chart, use the following command:
 
 ```shell
 helm upgrade --install geotax-application ./charts/aks/geotax-application \
