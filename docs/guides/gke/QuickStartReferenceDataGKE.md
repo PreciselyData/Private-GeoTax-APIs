@@ -59,8 +59,8 @@ helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
 --set "global.pdxSecret=<your-pdx-secret>" \
 --set "global.nfs.path=<e.g. /geotax_data>" \
 --set "global.nfs.server=<e.g. 10.129.165.194>" \
---set "geotax-reference-data-setup.dataDownload.image.repository=us.gcr.io/<Container-Name>/geotax-reference-data-extractor" \
---set "geotax-reference-data-setup.dataDownload.image.tag=3.0.1" \
+--set "geotax-reference-data.dataDownload.image.repository=us.gcr.io/<Container-Name>/geotax-reference-data-extractor" \
+--set "geotax-reference-data.dataDownload.image.tag=3.0.1" \
 --dependency-update --timeout 60m
 ```
 

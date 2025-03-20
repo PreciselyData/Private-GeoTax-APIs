@@ -62,8 +62,8 @@ helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
 --set "global.pdxSecret=<your-pdx-secret>" \
 --set "global.nfs.shareName=<AzureFileStoreShareName>" \
 --set "global.nfs.storageAccount=<AzureFileStoreAccountName>" \
---set "geotax-reference-data-setup.dataDownload.image.repository=<your-azure-acr-name>.azurecr.io/geotax-reference-data-extractor" \
---set "geotax-reference-data-setup.dataDownload.image.tag=3.0.1" \
+--set "geotax-reference-data.dataDownload.image.repository=<your-azure-acr-name>.azurecr.io/geotax-reference-data-extractor" \
+--set "geotax-reference-data.dataDownload.image.tag=3.0.1" \
 --dependency-update --timeout 60m
 ```
 

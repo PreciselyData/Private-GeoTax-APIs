@@ -63,8 +63,8 @@ helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
 --set "global.pdxSecret=<your-pdx-secret>" \
 --set "global.nfs.fileSystemId=<FileSystemId>" \
 --set "global.awsRegion=<AWSRegion>" \
---set "geotax-reference-data-setup.dataDownload.image.repository=<AWS-ACCOUNT-ID>.dkr.ecr.<AWS-REGION>.amazonaws.com/geotax-reference-data-extractor" \
---set "geotax-reference-data-setup.dataDownload.image.tag=3.0.1" \
+--set "geotax-reference-data.dataDownload.image.repository=<AWS-ACCOUNT-ID>.dkr.ecr.<AWS-REGION>.amazonaws.com/geotax-reference-data-extractor" \
+--set "geotax-reference-data.dataDownload.image.tag=3.0.1" \
 --dependency-update --timeout 60m
 ```
 
