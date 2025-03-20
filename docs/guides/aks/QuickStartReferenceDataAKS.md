@@ -48,8 +48,8 @@ Below is the default value of reference data config map:
 
 The reference data key is in the format: `[ProductName#Geography#RoasterGranularity#DataFormat]` e.g. `GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data`. You can also pass optional vintage parameter (to download the specific vintage data instead of latest): `[ProductName#Geography#RoasterGranularity#DataFormat#Vintage]`
 
-> NOTE: If you want to change the default reference data, you need to Prepare the JSON value in above format, Minify and Escape it using any online tools.
-Afterward, overwrite the default value in the [values.yaml](../../../charts/aks/reference-data-setup/values.yaml) file of the reference data helm chart.
+_**NOTE: If you want to change the default reference data, you need to Prepare the JSON value in above format, Minify and Escape it using any online tools.
+Afterward, overwrite the default value of dataConfigMap section in the [values.yaml](../../../charts/aks/reference-data-setup/values.yaml) file of the reference data helm chart.**_
 
 
 ## Step 4: Running the Reference Data Installation Helm Chart
