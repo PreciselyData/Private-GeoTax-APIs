@@ -3,9 +3,9 @@ name: geotax-aks
 description: A Helm chart for Geo Tax Application.
 
 type: application
-version: 3.0.0
+version: 3.0.1
 appVersion: "1.16.0"
 dependencies:
   - name: geotax
     repository: file://../../component-charts/geotax-generic
-    version: "3.0.0"
+    version: "3.0.1"

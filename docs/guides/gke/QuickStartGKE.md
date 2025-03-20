@@ -108,8 +108,8 @@ You can run the following commands after extracting the zipped docker images:
 cd ./geotax-images
 gcloud auth configure-docker --quiet
 docker load -i ./geotax-service.tar
-docker tag geotax-service:latest us.gcr.io/<project-name>/geotax-service:3.0.0
-docker push us.gcr.io/<project-name>/geotax-service:3.0.0
+docker tag geotax-service:latest us.gcr.io/<project-name>/geotax-service:3.0.1
+docker push us.gcr.io/<project-name>/geotax-service:3.0.1
 ```
 
 ## Step 4: Create and Configure Google Filestore
@@ -196,37 +196,14 @@ Follow the following steps to create a Filestore instance for the GeoTax Applica
 
 ## Step 5: Installation of Reference Data
 
-The GeoTax Application relies on reference data for performing geotax operations. For more information
-related to reference data, please refer to [this link](../../ReferenceData.md).
-
-> Note: You can run the reference data helm chart after you have configured Filestore instances and linked it to the
-> cluster
-> when you need to update the deployed data, such as with a new vintage, or if you want to add
-> support for additional countries.
-
-You can make use of
-a [miscellaneous helm chart for installing reference data](../../../charts/component-charts/reference-data-setup-generic/README.md),
-please
-follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact
-Precisely Sales Team for the reference data installation.
-
-```shell
-helm install geotax-reference-data ./charts/gke/reference-data-setup/ \
---set "global.pdxApiKey=<pdx-api-key>" \
---set "global.pdxSecret=<pdx-api-secret>" \
---set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
---set "global.nfs.server=<filestoreServerIP>" \
---set "geotax-reference-data.node-selector.node-app=<node-selector-label>" \
---set "geotax-reference-data.image.repository=[e.g. us.gcr.io/<project-id>/geotax-reference-data-extractor]" \
---dependency-update --timeout 60m
-```
+The GeoTax Application relies on reference data for performing GeoTax operations.
+If you don't have reference data installed in your mounted file storage:
+- Refer to [this guide](../../ReferenceData.md) for more information about reference data, and it's recommended structure.
+- Refer to [this quickstart guide](./QuickStartReferenceDataGKE.md) for installing reference data using Helm Chart.
 
 ## Step 6: Installation of GeoTax Helm Chart
 
-> NOTE: For every helm chart version update, make sure you run
-> the [Step 3](#step-3-download-geotax-docker-images) for uploading the docker images with the newest tag.
-
-To install/upgrade the geotax helm chart, use the following command:
+After installing the reference data, to install/upgrade the geotax helm chart, use the following command:
 
 ```shell
 helm upgrade --install geotax-application ./charts/gke/geotax-application \

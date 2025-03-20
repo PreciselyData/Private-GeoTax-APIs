@@ -241,14 +241,14 @@ if not COUNTRY_MAPPING:
 if not LOCAL_PATH:
     LOCAL_PATH = os.getcwd()
 
-client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_DEMO_APP_3.0.0")
+client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_DEMO_APP_3.0.1")
 
 extract_path = args.dest_path
 if not args.dest_path:
     extract_path = "/mnt/data/geotax-data"
 spd_path = os.path.join(LOCAL_PATH, "spds")
 
-print(f"Provided products for Installation: {COUNTRY_SPD_MAPPING}")
+print(f"Provided products for Installation: {COUNTRY_MAPPING}")
 os.makedirs(extract_path, exist_ok=True)
 for product in COUNTRY_MAPPING:
     os.makedirs(spd_path, exist_ok=True)

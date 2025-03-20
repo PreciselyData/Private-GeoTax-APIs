@@ -1,4 +1,8 @@
-# Reference Data
+# Reference Data Highlights
+
+> NOTE: Follow the Quick Start Guides based on your cloud provided for installing the reference data using provided Helm Charts for reference data installation.
+[EKS](../charts/eks/reference-data-setup/README.md)|[AKS](../charts/aks/reference-data-setup/README.md)|[GKE](../charts/gke/reference-data-setup/README.md)
+
 
 Precisely offers a large variety of datasets, which can be utilized depending on the use case.
 
@@ -46,13 +50,34 @@ basePath/
 │   │       └── ...
 ```
 
-# Reference Data Installation
+### Helm Values
 
-To download the reference data and all the required components for running the Helm Chart,
-visit [Precisely Data Portfolio](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access files available in [Precisely Data Experience](https://data.precisely.com/).
+The following is the summary of some *helm values*
+provided by this chart:
 
-Additionally, we have provided a miscellaneous helm chart which will download the required reference data SPDs from Precisely Data Experience and extract it to the necessary reference data structure.
-Please visit the [reference-data-setup helm chart](../charts/component-charts/reference-data-setup-generic/README.md).
+> click the `▶` symbol to expand
+
+<details>
+<summary><code>image.*</code></summary>
+
+| Parameter          | Description                                              | Default                           |
+|--------------------|----------------------------------------------------------|-----------------------------------|
+| `image.repository` | the reference-data-extractor container image repository  | `geotax-reference-data-extractor` |
+| `image.tag`        | the reference-data-extractor container image version tag | `3.0.1`                           |
+
+<hr>
+</details>
+
+<details>
+<summary><code>global.*</code></summary>
+
+| Parameter                  | Description                                                | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|----------------------------|------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *`global.pdxApiKey`        | the apiKey of your PDX account                             | `pdx-api-key`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| *`global.pdxSecret`        | the secret key of your PDX account                         | `pdx-api-secret`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `global.dataConfigMap`     | a Map of reference data to be downloaded against countries | `[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]` |
+
+<hr>
+</details>
 
 [🔗 Return to `Table of Contents` 🔗](../README.md#components)

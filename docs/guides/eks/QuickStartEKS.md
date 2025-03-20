@@ -17,7 +17,8 @@ To deploy the GeoTax application in AWS EKS, install the following client tools:
 You can create the EKS cluster or use existing EKS cluster.
 
 - If you DON'T have EKS cluster, we have provided you with a
-  sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command from
+  sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command
+  from
   parent directory to create the cluster using the script:
     ```shell
     eksctl create cluster -f ./cluster-sample/eks/create-eks-cluster.yaml
@@ -40,7 +41,8 @@ You can create the EKS cluster or use existing EKS cluster.
     ```
 - Once you create EKS cluster, you can
   apply [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) so that the
-  cluster can be scaled vertically as per requirements. We have provided a sample [cluster autoscaler script](../../../cluster-sample/eks/cluster-auto-scaler.yaml). 
+  cluster can be scaled vertically as per requirements. We have provided a
+  sample [cluster autoscaler script](../../../cluster-sample/eks/cluster-auto-scaler.yaml).
 - Please run the following command to create cluster autoscaler:
     ```shell
     kubectl apply -f ./cluster-sample/eks/cluster-auto-scaler.yaml
@@ -51,14 +53,16 @@ You can create the EKS cluster or use existing EKS cluster.
     ```shell
     kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
     ```
-- The GeoTax service requires ingress controller setup. Run the following command for setting up NGINX ingress controller:
+- The GeoTax service requires ingress controller setup. Run the following command for setting up NGINX ingress
+  controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
   helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/eks/ingress-values.yaml
   ```
   *Note: You can update the nodeSelector according to your cluster's ingress node.*
 
-  Once ingress controller setup is completed, you can verify the status and get the ingress URL by using the following command:
+  Once ingress controller setup is completed, you can verify the status and get the ingress URL by using the following
+  command:
   ```shell
   kubectl get services -o wide -w nginx-ingress-ingress-nginx-controller    
   ```
@@ -69,7 +73,7 @@ You can create the EKS cluster or use existing EKS cluster.
 
 The docker files can be downloaded from Precisely's Data Portfolio. For information about Precisely's data portfolio,
 see the [Precisely Data Guide](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access softwares, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
+access software, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
 
 This projects assumes the docker images to be present in the ECR. However, if you haven't pushed the required docker
 images in the ECR, we have provided you with the sample scripts to download the docker images
@@ -94,7 +98,8 @@ deployed using [persistent volume](https://kubernetes.io/docs/concepts/storage/p
 volume is backed by Amazon Elastic File System (EFS) so that the data is ready to use immediately when the volume is
 mounted to the pods.
 
-We have provided python script to create EFS and link it to EKS cluster, or directly link existing EFS to the EKS cluster by creating mount targets.
+We have provided python script to create EFS and link it to EKS cluster, or directly link existing EFS to the EKS
+cluster by creating mount targets.
 
 **NOTE: If you already have created mount targets for the EFS to EKS cluster, skip this step.**
 
@@ -105,7 +110,8 @@ We have provided python script to create EFS and link it to EKS cluster, or dire
   python ./create_efs.py --cluster-name [eks-cluster-name] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region] --efs-name [precisely-geotax-efs] --security-group-name [precisely-geotax-sg]
   ```
 
-- If you already have EFS, but you want to create mount targets so that EFS can be accessed from the EKS cluster, run the following command:
+- If you already have EFS, but you want to create mount targets so that EFS can be accessed from the EKS cluster, run
+  the following command:
   ```shell
   cd ../scripts/eks/efs-creator
   pip install -r requirements.txt
@@ -114,23 +120,14 @@ We have provided python script to create EFS and link it to EKS cluster, or dire
 
 ## Step 5: Installation of Reference Data
 
-The GeoTax Application relies on reference data for performing GeoTax operations. For more information related to reference data, please refer to [this link](../../ReferenceData.md).
-
-
-You can make use of a [miscellaneous helm chart for installing reference data](../../../charts/eks/reference-data-setup/README.md), please follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
-```shell
-helm install geotax-reference-data ./charts/eks/reference-data-setup/ \
---set "global.pdxApiKey=[your-pdx-key]" \
---set "global.pdxSecret=[your-pdx-secret]" \
---set "global.nfs.fileSystemId=[fileSystemId]" \
---set "geotax.dataDownload.image.repository=[reference-data-image-repository]" \
---set "global.dataConfigMap=[\"Vertex L-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Payroll Tax Data#United States#All USA#Spectrum Platform Data\",\"Tax Rate Data ASCII#United States#All USA#Spectrum Platform Data\",\"Sovos Correspondence File ASCII#United States#All USA#Spectrum Platform Data\",\"Vertex O-Series ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Auxiliary File ASCII#United States#All USA#Spectrum Platform Data\",\"GeoTAX Premium Masterfile Monthly#United States#All USA#Spectrum Platform Data\",\"Vertex Q-Series ASCII#United States#All USA#Spectrum Platform Data\",\"Insurance Premium Tax Data#United States#All USA#Spectrum Platform Data\",\"Special Purpose District Data#United States#All USA#Spectrum Platform Data\"]" \
---dependency-update --timeout 60m
-```
+The GeoTax Application relies on reference data for performing GeoTax operations.
+If you don't have reference data installed in your EFS:
+- Refer to [this guide](../../ReferenceData.md) for more information about reference data, and it's recommended structure.
+- Refer to [this quickstart guide](./QuickStartReferenceDataEKS.md) for installing reference data using Helm Chart.
 
 ## Step 6: Installation of GeoTax Helm Chart
 
-To install/upgrade the GeoTax helm chart, use the following command:
+After reference data installation, to install/upgrade the GeoTax helm chart, use the following command:
 
 ```shell
 helm upgrade --install geotax-application ./charts/eks/geotax-application \
@@ -142,7 +139,7 @@ helm upgrade --install geotax-application ./charts/eks/geotax-application \
 --set "geotax.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
 --set "global.nodeSelector.node-app=geotax" \
 --set "geotax.image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/geotax-service" \
---set "geotax.image.tag=3.0.0" \
+--set "geotax.image.tag=3.0.1" \
 --namespace geotax-application --create-namespace
 ```
 
@@ -160,20 +157,23 @@ For more information on helm values, follow [this link](../../../charts/eks/geot
 
 ## Step 7: Monitoring GeoTax Helm Chart Installation
 
-Once you run the GeoTax helm install/upgrade command, it might take a couple of seconds to trigger the deployment. You can run the following command to check the creation of pods. Please wait until all the pods are in running state:
+Once you run the GeoTax helm install/upgrade command, it might take a couple of seconds to trigger the deployment. You
+can run the following command to check the creation of pods. Please wait until all the pods are in running state:
+
 ```shell
 kubectl get pods -w --namespace geotax-application
 ```
 
 When all the pods are up, you can run the following command to check the ingress service host:
+
 ```shell
 kubectl get services --namespace geotax-application
 ```
 
 ## Next Sections
-- [GeoTax API Usage](../../../charts/eks/geotax-application/README.md#geotax-service-api-usage)
+
+- [GeoTax API Usage](../../../charts/component-charts/geotax-generic/README.md#geotax-service-api-usage)
 - [Metrics, Traces and Dashboard](../../MetricsAndTraces.md)
 - [FAQs](../../faq/FAQs.md)
-
 
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)

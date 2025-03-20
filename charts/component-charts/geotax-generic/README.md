@@ -30,7 +30,7 @@ provided by this chart:
 | Parameter          | Description                            | Default          |
 |--------------------|----------------------------------------|------------------|
 | `image.repository` | the geotax container image repository  | `geotax-service` |
-| `image.tag`        | the geotax container image version tag | `3.0.0`          |
+| `image.tag`        | the geotax container image version tag | `3.0.1`          |
 
 <hr>
 </details>
@@ -167,4 +167,53 @@ curl --location 'http://{{baseUrl}}/v1/geo-tax/location' \
 }'
 ```
 
+### `v1/geo-tax/location/batch`
+
+This endpoint determines tax jurisdiction and tax codes of given coordinates.
+
+```shell
+curl --location 'http://localhost:8085/v1/geo-tax/location/batch' \
+--header 'Content-Type: application/json' \
+--data '{
+    "locations": [
+        {
+            "longitude": <double>,
+            "latitude": <double>
+        },
+        {
+            "longitude": <double>,
+            "latitude": <double>
+        }
+    ]
+}'
+```
+
+### `v1/geo-tax/address/batch`
+
+This endpoint determines tax jurisdiction and tax codes of list of addresses.
+
+```shell
+curl --location 'http://localhost:8085/v1/geo-tax/address/batch' \
+--header 'Content-Type: application/json' \
+--data '{
+    "addresses": [
+        {
+            "addressLines": ["<string>"],
+            "postalCode": "<string>",
+            "admin1": "<string>",
+            "city": "<string>"
+        },  
+        {
+            "addressLines": [
+                "<string>"
+            ],
+            "admin1": "<string>",
+            "admin2": "<string>",
+            "city": "<string>",
+            "postalCode": "<string>",
+            "postalCodeExt": "<string>"
+        }
+    ]
+}'
+```
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#components)
