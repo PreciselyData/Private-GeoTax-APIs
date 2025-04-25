@@ -82,11 +82,13 @@ spec:
             - name: SDK_BLOCKING_QUEUE_CAPACITY
               value: "100000"
             - name: SDK_POOL_MAX_TOTAL
-              value: "8"
+              value: "24"
             - name: SDK_POOL_MAX_TOTAL_PER_KEY
-              value: "2"
+              value: "1"
             - name: SDK_POOL_MAX_IDLE_PER_KEY
-              value: "2"
+              value: "1"
+            - name: SDK_POOL_MIN_IDLE_PER_KEY
+              value: "1"
             - name: AUTH_ENABLED
               value: "false"
             - name: KAFKA_ENABLED
