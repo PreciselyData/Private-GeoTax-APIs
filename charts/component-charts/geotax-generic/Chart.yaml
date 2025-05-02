@@ -3,10 +3,10 @@ name: geotax
 description: A Helm chart for Geo Tax Application Service
 
 type: application
-version: 3.0.1
+version: 3.0.2
 appVersion: "1.16.0"
 dependencies:
   - name: geotax-hook
     repository: file://charts/geotax-hook
-    version: "3.0.1"
+    version: "3.0.2"
     condition: geotax-hook.enabled

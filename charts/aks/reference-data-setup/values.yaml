@@ -13,4 +13,4 @@ geotax-reference-data:
   dataDownload:
     image:
       repository: geotax-reference-data-extractor
-      tag: 3.0.1
+      tag: 3.0.2

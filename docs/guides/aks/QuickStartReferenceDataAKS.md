@@ -13,16 +13,16 @@ Follow the below steps to create and push the docker image to ACR:
 
 ```shell
 cd ./charts/reference-data-setup/image
-docker build . -t geotax-reference-data-extractor:3.0.1
+docker build . -t geotax-reference-data-extractor:3.0.2
 ```
 
 ```shell
 az login
 az acr login --name <registry-name> --subscription <subscription-id>
 
-docker tag geotax-reference-data-extractor:3.0.1 <your-container-registry-name>.azurecr.io/geotax-reference-data-extractor:3.0.1
+docker tag geotax-reference-data-extractor:3.0.2 <your-container-registry-name>.azurecr.io/geotax-reference-data-extractor:3.0.2
 
-docker push <your-container-registry-name>.azurecr.io/geotax-reference-data-extractor:3.0.1
+docker push <your-container-registry-name>.azurecr.io/geotax-reference-data-extractor:3.0.2
 ```
 
 ## Step 3: Prepare the Reference Data Required for Installation (Optional)
@@ -63,7 +63,7 @@ helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
 --set "global.nfs.shareName=<AzureFileStoreShareName>" \
 --set "global.nfs.storageAccount=<AzureFileStoreAccountName>" \
 --set "geotax-reference-data.dataDownload.image.repository=<your-azure-acr-name>.azurecr.io/geotax-reference-data-extractor" \
---set "geotax-reference-data.dataDownload.image.tag=3.0.1" \
+--set "geotax-reference-data.dataDownload.image.tag=3.0.2" \
 --dependency-update --timeout 60m
 ```
 

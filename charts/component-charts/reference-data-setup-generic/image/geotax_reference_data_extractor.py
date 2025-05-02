@@ -241,7 +241,7 @@ if not COUNTRY_MAPPING:
 if not LOCAL_PATH:
     LOCAL_PATH = os.getcwd()
 
-client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_DEMO_APP_3.0.1")
+client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_DEMO_APP_3.0.2")
 
 extract_path = args.dest_path
 if not args.dest_path:

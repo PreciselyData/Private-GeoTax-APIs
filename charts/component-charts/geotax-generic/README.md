@@ -30,7 +30,7 @@ provided by this chart:
 | Parameter          | Description                            | Default          |
 |--------------------|----------------------------------------|------------------|
 | `image.repository` | the geotax container image repository  | `geotax-service` |
-| `image.tag`        | the geotax container image version tag | `3.0.1`          |
+| `image.tag`        | the geotax container image version tag | `3.0.2`          |
 
 <hr>
 </details>

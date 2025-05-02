@@ -108,8 +108,8 @@ You can run the following commands after extracting the zipped docker images:
 cd ./geotax-images
 gcloud auth configure-docker --quiet
 docker load -i ./geotax-service.tar
-docker tag geotax-service:latest us.gcr.io/<project-name>/geotax-service:3.0.1
-docker push us.gcr.io/<project-name>/geotax-service:3.0.1
+docker tag geotax-service:latest us.gcr.io/<project-name>/geotax-service:3.0.2
+docker push us.gcr.io/<project-name>/geotax-service:3.0.2
 ```
 
 ## Step 4: Create and Configure Google Filestore
