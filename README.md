@@ -124,7 +124,7 @@ Deploy the geotax application using helm. Follow the guides to get the steps for
 - [Kubernetes Setup](charts/component-charts/geotax-generic/README.md)
 
 > NOTE: As of now, GeoTax helm chart is only supported for AWS Elastic Kubernetes Service, Azure Kubernetes Service and
-> Google Kubernetes Engine.
+> Google Kubernetes Engine. For running Local Setup, it's only supported on Docker Desktop.
 
 ## GeoTax Helm Version Chart
 
