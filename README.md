@@ -137,6 +137,7 @@ Following is the helm version chart against GeoTax PDX docker image version and 
 | `1.0.0/2024.8/Aug 5, 2024`                                  | `1.0.0 - 2.0.0`         |
 | `1.0.0/2024.11/Nov 20, 2024`                                | `3.0.0`                 |
 | `1.0.0/2025.3/Mar 20, 2025`                                 | `3.0.1`                 |
+| `1.0.0/2025.5/May 01, 2025`                                 | `3.0.2`                 |
 
 Refer Downloading GeoTax Docker Images
 for [[EKS](docs/guides/eks/QuickStartEKS.md#step-3-download-geotax-docker-images) |[AKS](/docs/guides/aks/QuickStartAKS.md#step-3-download-geotax-docker-images) |[GKE](/docs/guides/gke/QuickStartGKE.md#step-3-download-geotax-docker-images)]
