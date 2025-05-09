@@ -63,7 +63,7 @@ provided by this chart:
 | Parameter          | Description                                              | Default                           |
 |--------------------|----------------------------------------------------------|-----------------------------------|
 | `image.repository` | the reference-data-extractor container image repository  | `geotax-reference-data-extractor` |
-| `image.tag`        | the reference-data-extractor container image version tag | `3.0.1`                           |
+| `image.tag`        | the reference-data-extractor container image version tag | `3.0.2`                           |
 
 <hr>
 </details>

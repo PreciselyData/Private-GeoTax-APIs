@@ -13,13 +13,13 @@ Follow the below steps to create and push the docker image:
 
 ```shell
 cd ./charts/reference-data-setup/image
-docker build . -t geotax-reference-data-extractor:3.0.1
+docker build . -t geotax-reference-data-extractor:3.0.2
 ```
 
 ```shell
 gcloud auth configure-docker --quiet
-docker tag geotax-reference-data-extractor:3.0.1 us.gcr.io/<project-name>/geotax-reference-data-extractor:3.0.1
-docker push us.gcr.io/<project-name>/geotax-reference-data-extractor:3.0.1
+docker tag geotax-reference-data-extractor:3.0.2 us.gcr.io/<project-name>/geotax-reference-data-extractor:3.0.2
+docker push us.gcr.io/<project-name>/geotax-reference-data-extractor:3.0.2
 ```
 
 ## Step 3: Prepare the Reference Data Required for Installation (Optional)
@@ -60,7 +60,7 @@ helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
 --set "global.nfs.path=<e.g. /geotax_data>" \
 --set "global.nfs.server=<e.g. 10.129.165.194>" \
 --set "geotax-reference-data.dataDownload.image.repository=us.gcr.io/<Container-Name>/geotax-reference-data-extractor" \
---set "geotax-reference-data.dataDownload.image.tag=3.0.1" \
+--set "geotax-reference-data.dataDownload.image.tag=3.0.2" \
 --dependency-update --timeout 60m
 ```
 

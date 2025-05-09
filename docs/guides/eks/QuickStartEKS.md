@@ -139,7 +139,7 @@ helm upgrade --install geotax-application ./charts/eks/geotax-application \
 --set "geotax.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
 --set "global.nodeSelector.node-app=geotax" \
 --set "geotax.image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/geotax-service" \
---set "geotax.image.tag=3.0.1" \
+--set "geotax.image.tag=3.0.2" \
 --namespace geotax-application --create-namespace
 ```
 

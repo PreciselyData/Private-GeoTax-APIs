@@ -13,7 +13,7 @@ Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/reference-data-setup/image
-docker build . -t geotax-reference-data-extractor:3.0.1
+docker build . -t geotax-reference-data-extractor:3.0.2
 ```
 
 ```shell
@@ -21,9 +21,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 
 aws ecr create-repository --repository-name geotax-reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
-docker tag geotax-reference-data-extractor:3.0.1 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/geotax-reference-data-extractor:3.0.1
+docker tag geotax-reference-data-extractor:3.0.2 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/geotax-reference-data-extractor:3.0.2
 
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/geotax-reference-data-extractor:3.0.1
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/geotax-reference-data-extractor:3.0.2
 ```
 
 ## Step 3: Prepare the Reference Data Required for Installation (Optional)
@@ -64,7 +64,7 @@ helm install geotax-reference-data ./charts/aks/reference-data-setup/ \
 --set "global.nfs.fileSystemId=<FileSystemId>" \
 --set "global.awsRegion=<AWSRegion>" \
 --set "geotax-reference-data.dataDownload.image.repository=<AWS-ACCOUNT-ID>.dkr.ecr.<AWS-REGION>.amazonaws.com/geotax-reference-data-extractor" \
---set "geotax-reference-data.dataDownload.image.tag=3.0.1" \
+--set "geotax-reference-data.dataDownload.image.tag=3.0.2" \
 --dependency-update --timeout 60m
 ```
 

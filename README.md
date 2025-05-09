@@ -124,7 +124,7 @@ Deploy the geotax application using helm. Follow the guides to get the steps for
 - [Kubernetes Setup](charts/component-charts/geotax-generic/README.md)
 
 > NOTE: As of now, GeoTax helm chart is only supported for AWS Elastic Kubernetes Service, Azure Kubernetes Service and
-> Google Kubernetes Engine.
+> Google Kubernetes Engine. For running Local Setup, it's only supported on Docker Desktop.
 
 ## GeoTax Helm Version Chart
 
@@ -136,7 +136,8 @@ Following is the helm version chart against GeoTax PDX docker image version and 
 | `1.0.0/2024.4/Apr 18, 2024`                                 | `1.0.0`                 |
 | `1.0.0/2024.8/Aug 5, 2024`                                  | `1.0.0 - 2.0.0`         |
 | `1.0.0/2024.11/Nov 20, 2024`                                | `3.0.0`                 |
-| `1.0.0/2025.3/Mar 20, 2025` upto latest                     | `3.0.1` upto latest     |
+| `1.0.0/2025.3/Mar 20, 2025`                                 | `3.0.1`                 |
+| `1.0.0/2025.5/May 01, 2025`                                 | `3.0.2`                 |
 
 Refer Downloading GeoTax Docker Images
 for [[EKS](docs/guides/eks/QuickStartEKS.md#step-3-download-geotax-docker-images) |[AKS](/docs/guides/aks/QuickStartAKS.md#step-3-download-geotax-docker-images) |[GKE](/docs/guides/gke/QuickStartGKE.md#step-3-download-geotax-docker-images)]

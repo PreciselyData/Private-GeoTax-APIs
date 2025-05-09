@@ -3,11 +3,11 @@ name: geotax-aks-reference-data
 description: A Helm chart for Installation of GeoTax Reference Data
 
 type: application
-version: 3.0.1
+version: 3.0.2
 appVersion: "1.16.0"
 dependencies:
   - name: geotax-reference-data
     repository: file://../../component-charts/reference-data-setup-generic
-    version: "3.0.1"
+    version: "3.0.2"
 
 
