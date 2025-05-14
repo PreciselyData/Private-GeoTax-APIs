@@ -16,6 +16,7 @@ services:
       - DATA_PATH=/mnt/data/extracted
       - AUTH_ENABLED=false
       - METRICS_ENABLED=true
+      - OTEL_TRACES_EXPORTER=none
     networks:
       - precisely-geotax
     restart: always
