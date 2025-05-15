@@ -140,8 +140,8 @@ helm upgrade --install geotax-application ./charts/aks/geotax-application \
 
 #### Mandatory Parameters
 
-* ``global.nfs.storageAccount``: The Azure File Storage Account Name
-* ``global.nfs.containerName``: The Azure File Storage Container Name
+* ``global.nfs.storageAccount``: The Azure Blob Storage Account Name
+* ``global.nfs.containerName``: The Azure Blob Storage Container Name
 * ``global.nfs.sasToken``: The SAS token required to access the Azure Storage Account
 * ``global.manualDataConfig.configMapData.geotax\.vintage``: The folder where reference data is downloaded and synced
 * ``geotax.image.repository``: The image repository for the geotax service docker image
